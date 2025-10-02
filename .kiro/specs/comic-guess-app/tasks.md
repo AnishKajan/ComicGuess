@@ -26,7 +26,7 @@
   - _Requirements: 8.4, 8.6_
 
 - [ ] 3. Set up database connection and repository layer
-- [-] 3.1 Implement Azure Cosmos DB connection utilities
+- [x] 3.1 Implement Azure Cosmos DB connection utilities
 
   - Create database connection management with proper configuration
   - Implement partition key handling for users, puzzles, and guesses
