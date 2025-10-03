@@ -21,8 +21,81 @@ load_dotenv()
 
 app = FastAPI(
     title="ComicGuess API",
-    description="Daily comic character guessing game API",
-    version="1.0.0"
+    description="""
+    Daily comic character guessing game API.
+    
+    ## Features
+    
+    * **Daily Puzzles**: Get new character puzzles for Marvel, DC, and Image Comics
+    * **Guess Validation**: Submit and validate character name guesses
+    * **User Management**: Track user statistics and streaks
+    * **Image Serving**: Retrieve character images with CDN optimization
+    * **Rate Limiting**: Built-in protection against abuse
+    
+    ## Authentication
+    
+    Most endpoints require JWT authentication. Include the token in the Authorization header:
+    ```
+    Authorization: Bearer <your-jwt-token>
+    ```
+    
+    ## Rate Limits
+    
+    - Guess submissions: 30 per minute
+    - General API requests: 200 per minute
+    
+    ## Environments
+    
+    - **Production**: https://api.comicguess.com
+    - **Staging**: https://comicguess-backend-staging.azurewebsites.net
+    - **Development**: http://localhost:8000
+    """,
+    version="1.0.0",
+    contact={
+        "name": "ComicGuess Support",
+        "url": "https://comicguess.com/support",
+        "email": "support@comicguess.com",
+    },
+    license_info={
+        "name": "MIT License",
+        "url": "https://opensource.org/licenses/MIT",
+    },
+    servers=[
+        {
+            "url": "https://api.comicguess.com",
+            "description": "Production server"
+        },
+        {
+            "url": "https://comicguess-backend-staging.azurewebsites.net",
+            "description": "Staging server"
+        },
+        {
+            "url": "http://localhost:8000",
+            "description": "Development server"
+        }
+    ],
+    openapi_tags=[
+        {
+            "name": "game",
+            "description": "Game operations - puzzle retrieval and guess submission"
+        },
+        {
+            "name": "users",
+            "description": "User management and statistics"
+        },
+        {
+            "name": "images",
+            "description": "Character image serving and management"
+        },
+        {
+            "name": "health",
+            "description": "Health check and monitoring endpoints"
+        },
+        {
+            "name": "security",
+            "description": "Security and authentication endpoints"
+        }
+    ]
 )
 
 # Initialize threat protection with CAPTCHA

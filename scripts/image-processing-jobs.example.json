@@ -1,0 +1,62 @@
+[
+  {
+    "source_path": "/path/to/images/spider-man.jpg",
+    "universe": "marvel",
+    "character_name": "Spider-Man",
+    "is_primary": true,
+    "metadata": {
+      "artist": "John Romita Sr.",
+      "year": "1966",
+      "series": "Amazing Spider-Man",
+      "issue": "1"
+    }
+  },
+  {
+    "source_path": "/path/to/images/batman.jpg",
+    "universe": "dc",
+    "character_name": "Batman",
+    "is_primary": true,
+    "metadata": {
+      "artist": "Bob Kane",
+      "year": "1939",
+      "series": "Detective Comics",
+      "issue": "27"
+    }
+  },
+  {
+    "source_path": "/path/to/images/spawn.jpg",
+    "universe": "image",
+    "character_name": "Spawn",
+    "is_primary": true,
+    "metadata": {
+      "artist": "Todd McFarlane",
+      "year": "1992",
+      "series": "Spawn",
+      "issue": "1"
+    }
+  },
+  {
+    "source_path": "/path/to/images/wonder-woman.jpg",
+    "universe": "dc",
+    "character_name": "Wonder Woman",
+    "is_primary": true,
+    "metadata": {
+      "artist": "Harry G. Peter",
+      "year": "1941",
+      "series": "All Star Comics",
+      "issue": "8"
+    }
+  },
+  {
+    "source_path": "/path/to/images/iron-man.jpg",
+    "universe": "marvel",
+    "character_name": "Iron Man",
+    "is_primary": true,
+    "metadata": {
+      "artist": "Don Heck",
+      "year": "1963",
+      "series": "Tales of Suspense",
+      "issue": "39"
+    }
+  }
+]

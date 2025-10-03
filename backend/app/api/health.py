@@ -8,7 +8,7 @@ import asyncio
 import logging
 
 from app.monitoring.health import health_monitor, idempotency_manager
-from app.auth.middleware import get_current_user_optional
+from app.auth.middleware import get_optional_current_user as get_current_user_optional
 
 logger = logging.getLogger(__name__)
 

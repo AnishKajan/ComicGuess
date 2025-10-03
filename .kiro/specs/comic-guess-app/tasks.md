@@ -388,8 +388,8 @@
   - Write tests for analytics opt-in/opt-out functionality
   - _Requirements: 6.5_
 
-- [ ] 21. CI/CD & environments
-- [ ] 21.1 Set up automated CI/CD pipelines
+- [x] 21. CI/CD & environments
+- [x] 21.1 Set up automated CI/CD pipelines
 
   - Create GitHub Actions or Azure DevOps pipelines for lint, test, build, security scan, and deploy
   - Implement automated security scanning and dependency vulnerability checks
@@ -397,7 +397,7 @@
   - Write tests for pipeline functionality and deployment validation
   - _Requirements: 8.6_
 
-- [ ] 21.2 Configure multi-environment deployment strategy
+- [x] 21.2 Configure multi-environment deployment strategy
 
   - Set up Dev/Staging/Prod environments with separate secrets and configurations
   - Implement blue-green or canary deployment strategies for backend services
@@ -405,7 +405,7 @@
   - Write tests for deployment strategies and environment isolation
   - _Requirements: 6.1, 6.3, 6.5_
 
-- [ ] 21.3 Add API documentation and contract testing
+- [x] 21.3 Add API documentation and contract testing
 
   - Generate and publish OpenAPI specifications automatically
   - Implement contract tests for API client-server interactions
@@ -413,7 +413,7 @@
   - Write tests for API contract compliance and documentation accuracy
   - _Requirements: 8.1, 8.2, 8.3, 8.4_
 
-- [ ] 21.4 Implement Infrastructure as Code
+- [x] 21.4 Implement Infrastructure as Code
 
   - Create Bicep or Terraform templates for Cosmos DB, Storage, App Service, and Functions
   - Implement infrastructure versioning and change management
@@ -421,8 +421,8 @@
   - Write tests for infrastructure provisioning and configuration
   - _Requirements: 5.1, 5.2, 6.1_
 
-- [ ] 22. Cost & performance management
-- [ ] 22.1 Implement cost monitoring and optimization
+- [x] 22. Cost & performance management
+- [x] 22.1 Implement cost monitoring and optimization
 
   - Set up Azure budgets and cost alerts with appropriate thresholds
   - Plan Cosmos DB RU/s requirements with autoscale guardrails
@@ -430,7 +430,7 @@
   - Write tests for cost monitoring and budget alert functionality
   - _Requirements: 5.1, 5.5_
 
-- [ ] 22.2 Add performance testing and optimization
+- [x] 22.2 Add performance testing and optimization
 
   - Create load and soak tests targeting expected daily active users
   - Verify cache strategy effectiveness under realistic load conditions
@@ -438,7 +438,7 @@
   - Write tests for performance benchmarks and regression detection
   - _Requirements: 6.1, 6.4_
 
-- [ ] 22.3 Optimize image delivery pipeline
+- [x] 22.3 Optimize image delivery pipeline
 
   - Implement image optimization pipeline to strip EXIF data and resize appropriately
   - Create automated image processing and compression workflows
@@ -446,8 +446,8 @@
   - Write tests for image optimization quality and performance
   - _Requirements: 5.2, 5.4, 6.4_
 
-- [ ] 23. Admin & content operations
-- [ ] 23.1 Create administrative interface
+- [-] 23. Admin & content operations
+- [-] 23.1 Create administrative interface
 
   - Build minimal admin UI with RBAC for puzzle scheduling and hotfixes
   - Implement secure administrative access and audit logging

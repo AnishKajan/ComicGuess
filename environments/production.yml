@@ -1,0 +1,112 @@
+# Production Environment Configuration
+name: production
+description: Production environment for live users
+
+# Infrastructure
+azure:
+  resource_group: comicguess-prod-rg
+  location: eastus
+  app_service:
+    name: comicguess-backend-prod
+    sku: P1V2
+    instances: 3
+    auto_scale:
+      min_instances: 2
+      max_instances: 10
+      cpu_threshold: 70
+  cosmos_db:
+    account_name: comicguess-prod-cosmos
+    database_name: comicguess_prod
+    throughput: 2000
+    geo_replication:
+      - westus
+      - westeurope
+  storage:
+    account_name: comicguessprodstorage
+    tier: Standard_RAGRS
+    cdn_enabled: true
+  function_app:
+    name: comicguess-prod-functions
+    sku: EP2
+
+# Application Configuration
+app:
+  environment: production
+  debug: false
+  log_level: WARNING
+  cors_origins:
+    - https://comicguess.com
+    - https://www.comicguess.com
+  rate_limits:
+    guess_submissions: 30   # per minute
+    api_requests: 200       # per minute
+
+# Database Configuration
+database:
+  partition_strategy: user_based
+  consistency_level: Strong
+  backup_retention: 90  # days
+  point_in_time_restore: true
+
+# Security Configuration
+security:
+  jwt_expiration: 8   # hours
+  session_timeout: 30 # minutes
+  password_policy:
+    min_length: 12
+    require_special: true
+    require_numbers: true
+    require_uppercase: true
+  rate_limiting:
+    enabled: true
+    strict_mode: true
+  waf_enabled: true
+  ddos_protection: true
+
+# Monitoring
+monitoring:
+  application_insights: true
+  log_retention: 180  # days
+  metrics_retention: 365  # days
+  alerts:
+    error_rate_threshold: 1   # percent
+    response_time_threshold: 1000  # ms
+    availability_threshold: 99.9  # percent
+  sla_targets:
+    availability: 99.9
+    response_time_p95: 500  # ms
+    error_rate: 0.1  # percent
+
+# Feature Flags
+features:
+  new_character_upload: false
+  advanced_analytics: true
+  beta_features: false
+
+# Deployment Strategy
+deployment:
+  strategy: canary
+  canary_percentage: 10
+  promotion_stages:
+    - percentage: 10
+      duration: 300  # 5 minutes
+    - percentage: 50
+      duration: 600  # 10 minutes
+    - percentage: 100
+      duration: 0
+  health_check:
+    path: /health
+    timeout: 10
+    retries: 3
+  rollback:
+    automatic: true
+    threshold: 2  # percent error rate
+    max_rollback_time: 300  # 5 minutes
+
+# Compliance
+compliance:
+  data_retention_policy: 2555  # days (7 years)
+  audit_logging: true
+  encryption_at_rest: true
+  encryption_in_transit: true
+  gdpr_compliance: true

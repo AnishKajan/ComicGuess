@@ -128,8 +128,8 @@ async def submit_guess(
 
 @router.get("/puzzle/today", response_model=PuzzleResponse)
 async def get_today_puzzle(
-    universe: str = Query(..., description="Comic universe (marvel, dc, image)"),
     response: Response,
+    universe: str = Query(..., description="Comic universe (marvel, dc, image)"),
     current_user: dict = Depends(get_current_user)
 ) -> PuzzleResponse:
     """
@@ -170,8 +170,8 @@ async def get_today_puzzle(
 @router.get("/puzzle/{puzzle_id}/status", response_model=PuzzleStatusResponse)
 async def get_puzzle_status(
     puzzle_id: str,
-    user_id: str = Query(..., description="User ID to check status for"),
     response: Response,
+    user_id: str = Query(..., description="User ID to check status for"),
     current_user: dict = Depends(get_current_user)
 ) -> PuzzleStatusResponse:
     """

@@ -1,0 +1,23 @@
+{
+  "azure_connection_string": "DefaultEndpointsProtocol=https;AccountName=comicguessstorage;AccountKey=your_key_here;EndpointSuffix=core.windows.net",
+  "container_name": "character-images",
+  "cdn_base_url": "https://cdn.comicguess.com",
+  "cloudflare_zone_id": "your_cloudflare_zone_id",
+  "cloudflare_api_token": "your_cloudflare_api_token",
+  "optimization_settings": {
+    "target_width": 800,
+    "target_height": 600,
+    "quality": 85,
+    "formats": ["webp", "avif"],
+    "create_thumbnails": true,
+    "thumbnail_size": {
+      "width": 200,
+      "height": 150
+    }
+  },
+  "processing_limits": {
+    "max_concurrent_jobs": 3,
+    "max_file_size_mb": 50,
+    "timeout_seconds": 300
+  }
+}

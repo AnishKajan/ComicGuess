@@ -1,0 +1,77 @@
+# Staging Environment Configuration
+name: staging
+description: Staging environment for pre-production testing
+
+# Infrastructure
+azure:
+  resource_group: comicguess-staging-rg
+  location: eastus
+  app_service:
+    name: comicguess-backend-staging
+    sku: S1
+    instances: 2
+  cosmos_db:
+    account_name: comicguess-staging-cosmos
+    database_name: comicguess_staging
+    throughput: 800
+  storage:
+    account_name: comicguessstagingstorage
+    tier: Standard_GRS
+  function_app:
+    name: comicguess-staging-functions
+    sku: EP1
+
+# Application Configuration
+app:
+  environment: staging
+  debug: false
+  log_level: INFO
+  cors_origins:
+    - https://comicguess-staging.vercel.app
+    - https://staging.comicguess.com
+  rate_limits:
+    guess_submissions: 60   # per minute
+    api_requests: 500       # per minute
+
+# Database Configuration
+database:
+  partition_strategy: user_based
+  consistency_level: Session
+  backup_retention: 14  # days
+
+# Security Configuration
+security:
+  jwt_expiration: 12  # hours
+  session_timeout: 1  # hour
+  password_policy:
+    min_length: 10
+    require_special: true
+  rate_limiting:
+    enabled: true
+    strict_mode: true
+
+# Monitoring
+monitoring:
+  application_insights: true
+  log_retention: 60  # days
+  metrics_retention: 60  # days
+  alerts:
+    error_rate_threshold: 5   # percent
+    response_time_threshold: 3000  # ms
+
+# Feature Flags
+features:
+  new_character_upload: true
+  advanced_analytics: true
+  beta_features: false
+
+# Deployment Strategy
+deployment:
+  strategy: blue_green
+  health_check:
+    path: /health
+    timeout: 30
+    retries: 5
+  rollback:
+    automatic: true
+    threshold: 10  # percent error rate

@@ -1,0 +1,317 @@
+name: API Documentation and Contract Testing
+
+'on':
+  push:
+    branches: [main, develop]
+    paths:
+      - 'backend/**'
+      - 'scripts/generate-openapi.py'
+      - 'tests/contract/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'backend/**'
+      - 'scripts/generate-openapi.py'
+      - 'tests/contract/**'
+
+env:
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  generate-openapi-spec:
+    name: Generate OpenAPI Specification
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyyaml jsonschema
+
+      - name: Generate OpenAPI specification
+        run: |
+          cd ..
+          python scripts/generate-openapi.py \
+            --format json \
+            --output docs/api/openapi.json \
+            --validate
+
+      - name: Generate OpenAPI YAML
+        run: |
+          cd ..
+          python scripts/generate-openapi.py \
+            --format yaml \
+            --output docs/api/openapi.yaml \
+            --validate
+
+      - name: Generate API documentation
+        run: |
+          cd ..
+          python scripts/generate-openapi.py \
+            --format json \
+            --docs docs/api \
+            --validate
+
+      - name: Validate OpenAPI specification
+        run: |
+          cd ..
+          # Install OpenAPI validation tools
+          npm install -g @apidevtools/swagger-parser
+          
+          # Validate the generated spec
+          swagger-parser validate docs/api/openapi.json
+          swagger-parser validate docs/api/openapi.yaml
+
+      - name: Upload OpenAPI artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: openapi-specification
+          path: |
+            docs/api/openapi.json
+            docs/api/openapi.yaml
+            docs/api/README.md
+            docs/api/examples/
+
+      - name: Check for API changes
+        if: github.event_name == 'pull_request'
+        run: |
+          cd ..
+          # Compare with main branch
+          git fetch origin main
+          
+          # Generate spec for main branch
+          git checkout origin/main -- backend/
+          python scripts/generate-openapi.py --format json --output /tmp/openapi-main.json || echo "Could not generate spec for main branch"
+          
+          # Switch back to PR branch
+          git checkout HEAD -- backend/
+          
+          # Compare specs if both exist
+          if [ -f "/tmp/openapi-main.json" ] && [ -f "docs/api/openapi.json" ]; then
+            echo "🔍 Comparing API specifications..."
+            
+            # Install API diff tool
+            npm install -g @apidevtools/swagger-diff
+            
+            # Generate diff
+            swagger-diff /tmp/openapi-main.json docs/api/openapi.json --format markdown > api-changes.md || echo "API comparison completed"
+            
+            if [ -s api-changes.md ]; then
+              echo "📋 API Changes Detected:"
+              cat api-changes.md
+              
+              # Save changes for PR comment
+              echo "API_CHANGES_DETECTED=true" >> $GITHUB_ENV
+              echo "API_CHANGES_FILE=api-changes.md" >> $GITHUB_ENV
+            else
+              echo "✅ No API changes detected"
+            fi
+          else
+            echo "ℹ️ Cannot compare API specs (missing baseline or current spec)"
+          fi
+
+      - name: Comment PR with API changes
+        if: github.event_name == 'pull_request' && env.API_CHANGES_DETECTED == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            
+            let changesContent = '';
+            try {
+              changesContent = fs.readFileSync('api-changes.md', 'utf8');
+            } catch (error) {
+              changesContent = 'API changes detected but could not read details.';
+            }
+            
+            const body = `## 🔄 API Changes Detected
+            
+            This PR introduces changes to the API specification:
+            
+            ${changesContent}
+            
+            Please review these changes carefully and update any dependent services or documentation.
+            
+            📚 [View full API documentation](https://github.com/${{ github.repository }}/blob/${{ github.head_ref }}/docs/api/README.md)`;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
+
+  contract-testing:
+    name: API Contract Testing
+    runs-on: ubuntu-latest
+    needs: generate-openapi-spec
+    services:
+      cosmos-emulator:
+        image: mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:latest
+        ports:
+          - 8081:8081
+          - 10251:10251
+          - 10252:10252
+          - 10253:10253
+          - 10254:10254
+        env:
+          AZURE_COSMOS_EMULATOR_PARTITION_COUNT: 10
+          AZURE_COSMOS_EMULATOR_ENABLE_DATA_PERSISTENCE: false
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r backend/requirements.txt
+          pip install pytest requests jsonschema pyyaml
+
+      - name: Download OpenAPI artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: openapi-specification
+          path: docs/api/
+
+      - name: Wait for Cosmos DB Emulator
+        run: |
+          timeout 300 bash -c 'until curl -k https://localhost:8081/_explorer/emulator.pem; do sleep 5; done'
+
+      - name: Start backend server
+        run: |
+          cd backend
+          python -m uvicorn main:app --host 0.0.0.0 --port 8000 &
+          
+          # Wait for server to start
+          timeout 60 bash -c 'until curl -f http://localhost:8000/health; do sleep 2; done'
+        env:
+          APP_ENV: test
+          COSMOS_ENDPOINT: https://localhost:8081
+          COSMOS_KEY: C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==
+          COSMOS_DATABASE_NAME: test_comicguess
+          JWT_SECRET_KEY: test-secret-key-for-contract-testing
+          SESSION_SECRET: test-session-secret
+
+      - name: Run contract tests
+        run: |
+          python -m pytest tests/contract/test_api_contracts.py -v --tb=short
+        env:
+          TEST_API_URL: http://localhost:8000
+
+      - name: Run contract tests against live API
+        run: |
+          python tests/contract/test_api_contracts.py --url http://localhost:8000
+        env:
+          TEST_API_URL: http://localhost:8000
+
+      - name: Generate contract test report
+        if: always()
+        run: |
+          echo "# Contract Test Report" > contract-test-report.md
+          echo "" >> contract-test-report.md
+          echo "## Test Environment" >> contract-test-report.md
+          echo "- API URL: http://localhost:8000" >> contract-test-report.md
+          echo "- Python Version: ${{ env.PYTHON_VERSION }}" >> contract-test-report.md
+          echo "- Test Date: $(date)" >> contract-test-report.md
+          echo "" >> contract-test-report.md
+          
+          # Add OpenAPI spec info
+          if [ -f "docs/api/openapi.json" ]; then
+            echo "## OpenAPI Specification" >> contract-test-report.md
+            echo "- Format: JSON, YAML" >> contract-test-report.md
+            echo "- Endpoints: $(cat docs/api/openapi.json | jq '.paths | length')" >> contract-test-report.md
+            echo "- Version: $(cat docs/api/openapi.json | jq -r '.info.version')" >> contract-test-report.md
+            echo "" >> contract-test-report.md
+          fi
+          
+          echo "## Test Results" >> contract-test-report.md
+          echo "Contract tests completed. Check job logs for detailed results." >> contract-test-report.md
+
+      - name: Upload contract test report
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: contract-test-report
+          path: contract-test-report.md
+
+  publish-documentation:
+    name: Publish API Documentation
+    runs-on: ubuntu-latest
+    needs: [generate-openapi-spec, contract-testing]
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download OpenAPI artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: openapi-specification
+          path: docs/api/
+
+      - name: Setup Node.js for documentation tools
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Generate additional documentation formats
+        run: |
+          # Install documentation generation tools
+          npm install -g redoc-cli swagger-ui-dist
+          
+          # Generate ReDoc HTML documentation
+          redoc-cli build docs/api/openapi.json --output docs/api/redoc.html
+          
+          # Generate Swagger UI documentation
+          mkdir -p docs/api/swagger-ui
+          cp -r $(npm root -g)/swagger-ui-dist/* docs/api/swagger-ui/
+          
+          # Update Swagger UI to use our spec
+          sed -i 's|https://petstore.swagger.io/v2/swagger.json|../openapi.json|g' docs/api/swagger-ui/index.html
+          
+          echo "✅ Generated additional documentation formats"
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        if: github.ref == 'refs/heads/main'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/api
+          destination_dir: api-docs
+
+      - name: Create documentation summary
+        run: |
+          echo "# 📚 API Documentation Published" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "The API documentation has been generated and published:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 🔗 Links" >> $GITHUB_STEP_SUMMARY
+          echo "- [📖 API Documentation](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/api-docs/)" >> $GITHUB_STEP_SUMMARY
+          echo "- [🔧 Interactive API Explorer (ReDoc)](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/api-docs/redoc.html)" >> $GITHUB_STEP_SUMMARY
+          echo "- [🧪 Swagger UI](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/api-docs/swagger-ui/)" >> $GITHUB_STEP_SUMMARY
+          echo "- [📄 OpenAPI Spec (JSON)](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/api-docs/openapi.json)" >> $GITHUB_STEP_SUMMARY
+          echo "- [📄 OpenAPI Spec (YAML)](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/api-docs/openapi.yaml)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 📊 Specification Details" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -f "docs/api/openapi.json" ]; then
+            echo "- **Version**: $(cat docs/api/openapi.json | jq -r '.info.version')" >> $GITHUB_STEP_SUMMARY
+            echo "- **Endpoints**: $(cat docs/api/openapi.json | jq '.paths | length')" >> $GITHUB_STEP_SUMMARY
+            echo "- **Components**: $(cat docs/api/openapi.json | jq '.components.schemas | length // 0')" >> $GITHUB_STEP_SUMMARY
+          fi
