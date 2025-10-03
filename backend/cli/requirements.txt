@@ -1,0 +1,10 @@
+# CLI-specific requirements for ComicGuess content management tools
+# These are in addition to the main backend requirements
+
+# Image processing
+Pillow>=10.0.0
+
+# Additional utilities that might be useful for CLI operations
+click>=8.0.0  # Alternative CLI framework if needed
+rich>=13.0.0  # Rich text and beautiful formatting for CLI output
+tqdm>=4.65.0  # Progress bars for bulk operations

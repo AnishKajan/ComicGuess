@@ -22,8 +22,18 @@ class DocumentNotFoundError(DatabaseError):
     pass
 
 
+class ItemNotFoundError(DatabaseError):
+    """Raised when an item is not found"""
+    pass
+
+
 class DocumentAlreadyExistsError(DatabaseError):
     """Raised when trying to create a document that already exists"""
+    pass
+
+
+class DuplicateItemError(DatabaseError):
+    """Raised when trying to create an item that already exists"""
     pass
 
 

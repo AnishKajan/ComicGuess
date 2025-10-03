@@ -1,0 +1,140 @@
+{
+  "zone_name": "comicguess.com",
+  "dns_records": [
+    {
+      "type": "CNAME",
+      "name": "www",
+      "content": "comicguess.vercel.app",
+      "ttl": 300,
+      "proxied": true
+    },
+    {
+      "type": "CNAME", 
+      "name": "api",
+      "content": "comicguess-backend-prod.azurewebsites.net",
+      "ttl": 300,
+      "proxied": true
+    }
+  ],
+  "page_rules": [
+    {
+      "targets": [
+        {
+          "target": "url",
+          "constraint": {
+            "operator": "matches",
+            "value": "*.comicguess.com/images/*"
+          }
+        }
+      ],
+      "actions": [
+        {
+          "id": "cache_level",
+          "value": "cache_everything"
+        },
+        {
+          "id": "edge_cache_ttl",
+          "value": 86400
+        },
+        {
+          "id": "browser_cache_ttl",
+          "value": 86400
+        }
+      ],
+      "priority": 1,
+      "status": "active"
+    },
+    {
+      "targets": [
+        {
+          "target": "url",
+          "constraint": {
+            "operator": "matches",
+            "value": "api.comicguess.com/puzzle/today*"
+          }
+        }
+      ],
+      "actions": [
+        {
+          "id": "cache_level",
+          "value": "cache_everything"
+        },
+        {
+          "id": "edge_cache_ttl",
+          "value": 3600
+        },
+        {
+          "id": "browser_cache_ttl",
+          "value": 300
+        }
+      ],
+      "priority": 2,
+      "status": "active"
+    }
+  ],
+  "security_settings": {
+    "security_level": "medium",
+    "ssl": "full",
+    "always_use_https": "on",
+    "min_tls_version": "1.2",
+    "tls_1_3": "on",
+    "automatic_https_rewrites": "on",
+    "opportunistic_encryption": "on",
+    "waf": "on",
+    "bot_fight_mode": "on",
+    "challenge_passage": 1800,
+    "browser_integrity_check": "on"
+  },
+  "performance_settings": {
+    "minify": {
+      "css": "on",
+      "html": "on", 
+      "js": "on"
+    },
+    "brotli": "on",
+    "early_hints": "on",
+    "http2": "on",
+    "http3": "on",
+    "zero_rtt": "on",
+    "ipv6": "on"
+  },
+  "firewall_rules": [
+    {
+      "filter": {
+        "expression": "(http.request.method eq \"POST\" and http.request.uri.path contains \"/guess\") and (cf.threat_score gt 10 or not cf.client.bot)",
+        "paused": false
+      },
+      "action": "challenge",
+      "priority": 1,
+      "description": "Challenge suspicious POST requests to guess endpoint"
+    },
+    {
+      "filter": {
+        "expression": "cf.threat_score gt 50",
+        "paused": false
+      },
+      "action": "block",
+      "priority": 2,
+      "description": "Block high threat score requests"
+    },
+    {
+      "filter": {
+        "expression": "rate(5m) gt 100",
+        "paused": false
+      },
+      "action": "challenge",
+      "priority": 3,
+      "description": "Rate limit challenge for high request rates"
+    }
+  ],
+  "cache_purge_triggers": [
+    {
+      "event": "daily_puzzle_update",
+      "time": "00:00:00 UTC",
+      "paths": [
+        "/puzzle/today*",
+        "/api/puzzle/today*"
+      ]
+    }
+  ]
+}

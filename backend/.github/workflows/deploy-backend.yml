@@ -1,0 +1,229 @@
+name: Deploy Backend to Azure App Service
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'backend/**'
+      - '.github/workflows/deploy-backend.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'backend/**'
+
+env:
+  AZURE_WEBAPP_NAME: comicguess-backend
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run linting
+        run: |
+          pip install flake8 black isort
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          black --check .
+          isort --check-only .
+
+      - name: Run type checking
+        run: |
+          pip install mypy
+          mypy . --ignore-missing-imports
+
+      - name: Run tests
+        run: |
+          pytest tests/ -v --tb=short
+        env:
+          APP_ENV: test
+          COSMOS_ENDPOINT: ${{ secrets.TEST_COSMOS_ENDPOINT }}
+          COSMOS_KEY: ${{ secrets.TEST_COSMOS_KEY }}
+          AZURE_STORAGE_ACCOUNT_NAME: ${{ secrets.TEST_STORAGE_ACCOUNT }}
+          AZURE_STORAGE_ACCOUNT_KEY: ${{ secrets.TEST_STORAGE_KEY }}
+          JWT_SECRET_KEY: ${{ secrets.TEST_JWT_SECRET }}
+          SESSION_SECRET: ${{ secrets.TEST_SESSION_SECRET }}
+
+      - name: Run security scan
+        run: |
+          pip install safety bandit
+          safety check
+          bandit -r . -f json -o bandit-report.json || true
+
+      - name: Upload security scan results
+        uses: actions/upload-artifact@v3
+        with:
+          name: security-scan-results
+          path: backend/bandit-report.json
+
+  build-and-deploy-staging:
+    if: github.ref == 'refs/heads/develop'
+    runs-on: ubuntu-latest
+    needs: test
+    environment: staging
+    defaults:
+      run:
+        working-directory: ./backend
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy to Azure App Service (Staging)
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}-staging
+          package: .
+          startup-command: 'uvicorn main:app --host 0.0.0.0 --port 8000'
+
+      - name: Configure App Settings (Staging)
+        run: |
+          az webapp config appsettings set \
+            --name ${{ env.AZURE_WEBAPP_NAME }}-staging \
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+            --settings \
+              APP_ENV=staging \
+              COSMOS_ENDPOINT="${{ secrets.STAGING_COSMOS_ENDPOINT }}" \
+              COSMOS_KEY="${{ secrets.STAGING_COSMOS_KEY }}" \
+              COSMOS_DATABASE_NAME="${{ secrets.STAGING_COSMOS_DATABASE }}" \
+              AZURE_STORAGE_ACCOUNT_NAME="${{ secrets.STAGING_STORAGE_ACCOUNT }}" \
+              AZURE_STORAGE_ACCOUNT_KEY="${{ secrets.STAGING_STORAGE_KEY }}" \
+              JWT_SECRET_KEY="${{ secrets.STAGING_JWT_SECRET }}" \
+              SESSION_SECRET="${{ secrets.STAGING_SESSION_SECRET }}" \
+              ALLOWED_ORIGINS="${{ secrets.STAGING_ALLOWED_ORIGINS }}"
+
+      - name: Run deployment tests (Staging)
+        run: |
+          sleep 60  # Wait for deployment to complete
+          python -m pytest tests/test_deployment.py::TestDeploymentIntegration -v
+        env:
+          DEPLOYMENT_URL: https://${{ env.AZURE_WEBAPP_NAME }}-staging.azurewebsites.net
+
+  build-and-deploy-production:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs: test
+    environment: production
+    defaults:
+      run:
+        working-directory: ./backend
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy to Azure App Service (Production)
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}-prod
+          package: .
+          startup-command: 'uvicorn main:app --host 0.0.0.0 --port 8000 --workers 2'
+
+      - name: Configure App Settings (Production)
+        run: |
+          az webapp config appsettings set \
+            --name ${{ env.AZURE_WEBAPP_NAME }}-prod \
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+            --settings \
+              APP_ENV=production \
+              COSMOS_ENDPOINT="${{ secrets.PROD_COSMOS_ENDPOINT }}" \
+              COSMOS_KEY="${{ secrets.PROD_COSMOS_KEY }}" \
+              COSMOS_DATABASE_NAME="${{ secrets.PROD_COSMOS_DATABASE }}" \
+              AZURE_STORAGE_ACCOUNT_NAME="${{ secrets.PROD_STORAGE_ACCOUNT }}" \
+              AZURE_STORAGE_ACCOUNT_KEY="${{ secrets.PROD_STORAGE_KEY }}" \
+              JWT_SECRET_KEY="${{ secrets.PROD_JWT_SECRET }}" \
+              SESSION_SECRET="${{ secrets.PROD_SESSION_SECRET }}" \
+              ALLOWED_ORIGINS="${{ secrets.PROD_ALLOWED_ORIGINS }}"
+
+      - name: Run deployment tests (Production)
+        run: |
+          sleep 60  # Wait for deployment to complete
+          python -m pytest tests/test_deployment.py::TestDeploymentIntegration -v
+        env:
+          DEPLOYMENT_URL: https://${{ env.AZURE_WEBAPP_NAME }}-prod.azurewebsites.net
+
+      - name: Notify deployment success
+        if: success()
+        run: |
+          echo "✅ Production deployment successful!"
+          echo "URL: https://${{ env.AZURE_WEBAPP_NAME }}-prod.azurewebsites.net"
+
+  docker-build-and-push:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs: test
+    defaults:
+      run:
+        working-directory: ./backend
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to Azure Container Registry
+        uses: azure/docker-login@v1
+        with:
+          login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      - name: Build and push Docker image
+        run: |
+          docker build -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/comicguess-backend:${{ github.sha }} .
+          docker build -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/comicguess-backend:latest .
+          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/comicguess-backend:${{ github.sha }}
+          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/comicguess-backend:latest
+
+      - name: Deploy to Container Instance (Optional)
+        if: false  # Disabled by default, enable if using Container Instances
+        run: |
+          az container create \
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+            --name comicguess-backend-container \
+            --image ${{ secrets.REGISTRY_LOGIN_SERVER }}/comicguess-backend:latest \
+            --registry-login-server ${{ secrets.REGISTRY_LOGIN_SERVER }} \
+            --registry-username ${{ secrets.REGISTRY_USERNAME }} \
+            --registry-password ${{ secrets.REGISTRY_PASSWORD }} \
+            --dns-name-label comicguess-backend \
+            --ports 8000 \
+            --environment-variables \
+              APP_ENV=production \
+              COSMOS_ENDPOINT="${{ secrets.PROD_COSMOS_ENDPOINT }}" \
+              COSMOS_KEY="${{ secrets.PROD_COSMOS_KEY }}"

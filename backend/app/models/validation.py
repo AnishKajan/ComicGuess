@@ -9,12 +9,12 @@ class CharacterNameValidator:
     
     # Common character name patterns that should be allowed
     ALLOWED_PATTERNS = [
-        r'^[a-zA-Z0-9\s\-\'\.]+$'$',  # Letters, numbers, spaces, hyphens, apostrophes, periods
+        r'^[a-zA-Z0-9\s\-\'\.]+$',  # Letters, numbers, spaces, hyphens, apostrophes, periods
     ]
     
     # Characters that should be normalized
     NORMALIZATION_MAP = {
-        ''': "'",  # Smart apostrophe to regular apostrophe
+        "'": "'",  # Smart apostrophe to regular apostrophe
         '"': '"',  # Smart quotes to regular quotes
         '"': '"',
         '–': '-',  # En dash to hyphen
@@ -93,7 +93,7 @@ class UniverseValidator:
 class PuzzleIdValidator:
     """Utility class for validating puzzle IDs"""
     
-    PUZZLE_ID_PATTERN = re.compile(r'^(\d{8})-(marvel|dc|image)$')$')
+    PUZZLE_ID_PATTERN = re.compile(r'^(\d{8})-(marvel|dc|image)$')
     
     @classmethod
     def is_valid_puzzle_id(cls, puzzle_id: str) -> bool:
@@ -193,4 +193,4 @@ def validate_username(username: str) -> bool:
         return False
     
     # Allow letters, numbers, hyphens, underscores, and periods
-    return re.match(r'^[a-zA-Z0-9_\-\.]+$'$', username) is not None
+    return re.match(r'^[a-zA-Z0-9_\-\.]+$', username) is not None

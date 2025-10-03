@@ -84,7 +84,10 @@ class GuessResponse(BaseModel):
     """Model for guess API responses"""
     correct: bool = Field(..., description="Whether the guess was correct")
     character: Optional[str] = Field(None, description="Character name (only if correct)")
+    character_name: Optional[str] = Field(None, description="Character name (only if correct)")
     image_url: Optional[str] = Field(None, description="Character image URL (only if correct)")
+    character_image_url: Optional[str] = Field(None, description="Character image URL (only if correct)")
+    image_is_fallback: bool = Field(default=False, description="Whether the image is a fallback placeholder")
     streak: int = Field(..., description="Current streak for this universe")
     attempt_number: int = Field(..., description="Current attempt number")
     max_attempts: int = Field(default=6, description="Maximum attempts allowed")
