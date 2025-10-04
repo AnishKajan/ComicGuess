@@ -18,15 +18,18 @@ class UserRepository(BaseRepository[User]):
         super().__init__(settings.cosmos_container_users)
     
     def _has_partition_key(self, item: Dict[str, Any], partition_key: str) -> bool:
-        """Check if item has the required partition key (id for users)"""
-        return 'id' in item and item['id'] == partition_key
+        """Check if item has the required partition key (userId for users)"""
+        return 'userId' in item and item['userId'] == partition_key
     
     def _add_partition_key(self, item: Dict[str, Any], partition_key: str) -> Dict[str, Any]:
-        """Add partition key to item (id for users)"""
-        item['id'] = partition_key
+        """Add partition key to item (userId for users)"""
+        item['userId'] = partition_key
+        # Also set id for backward compatibility
+        if 'id' not in item:
+            item['id'] = partition_key
         return item
     
-    async def create_user(self, user_data: UserCreate) -> User:
+    async def create_user(self, user_data: UserCreate, password_hash: str) -> User:
         """Create a new user"""
         # Check if user with email already exists
         existing_user = await self.get_user_by_email(user_data.email)
@@ -36,21 +39,22 @@ class UserRepository(BaseRepository[User]):
         # Create user model
         user = User(
             username=user_data.username,
-            email=user_data.email
+            email=user_data.email,
+            password_hash=password_hash
         )
         
         # Convert to dict for storage
         user_dict = user.model_dump()
         
-        # Create in database
-        result = await self.create(user_dict, user.id)
+        # Create in database using userId as partition key
+        result = await self.create(user_dict, user.userId)
         
         # Return User model
         return User(**result)
     
     async def get_user_by_id(self, user_id: str) -> Optional[User]:
         """Get a user by ID"""
-        result = await self.get_by_id(user_id, user_id)
+        result = await self.get_by_id(user_id, user_id)  # Using user_id as both id and partition key
         if result:
             return User(**result)
         return None

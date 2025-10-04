@@ -8,9 +8,12 @@ class User(BaseModel):
     """User model for ComicGuess application"""
     
     id: str = Field(default_factory=lambda: str(uuid.uuid4()), description="Unique user identifier")
+    userId: str = Field(default="", description="User ID for partition key (same as id)")
     username: str = Field(..., min_length=3, max_length=50, description="User's display name")
     email: str = Field(..., description="User's email address")
+    password_hash: str = Field(..., description="Hashed password")
     created_at: datetime = Field(default_factory=datetime.utcnow, description="Account creation timestamp")
+    createdAt: datetime = Field(default_factory=datetime.utcnow, description="Account creation timestamp (alias)")
     streaks: Dict[str, int] = Field(
         default_factory=lambda: {"marvel": 0, "DC": 0, "image": 0},
         description="Current streaks per universe"
@@ -87,6 +90,12 @@ class User(BaseModel):
         """Ensure total wins doesn't exceed total games"""
         if self.total_wins > self.total_games:
             raise ValueError('Total wins cannot exceed total games')
+        # Ensure userId matches id for partition key consistency
+        if not self.userId:
+            self.userId = self.id
+        # Sync created_at and createdAt
+        if not self.createdAt:
+            self.createdAt = self.created_at
         return self
     
     model_config = {
@@ -100,6 +109,7 @@ class UserCreate(BaseModel):
     """Model for creating a new user"""
     username: str = Field(..., min_length=3, max_length=50)
     email: str = Field(...)
+    password: str = Field(..., min_length=6, description="Plain text password (will be hashed)")
     
     @field_validator('email')
     @classmethod
@@ -120,6 +130,13 @@ class UserCreate(BaseModel):
             raise ValueError('Username can only contain letters, numbers, hyphens, underscores, and periods')
         
         return v.strip()
+    
+    @field_validator('password')
+    @classmethod
+    def validate_password_create(cls, v):
+        if len(v) < 6:
+            raise ValueError('Password must be at least 6 characters long')
+        return v
 
 
 class UserUpdate(BaseModel):

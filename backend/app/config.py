@@ -6,7 +6,7 @@ class Settings(BaseSettings):
     # Azure Cosmos DB Configuration
     cosmos_db_endpoint: str = ""
     cosmos_db_key: str = ""
-    cosmos_db_database_name: str = "comicguess"
+    cosmos_db_database_name: str = "comicguessdb"
     cosmos_db_container_users: str = "users"
     cosmos_db_container_puzzles: str = "puzzles"
     cosmos_db_container_guesses: str = "guesses"

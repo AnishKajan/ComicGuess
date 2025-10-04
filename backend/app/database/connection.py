@@ -32,8 +32,8 @@ class CosmosDBConnection:
                 
                 # Create Cosmos client
                 self._client = CosmosClient(
-                    url=settings.cosmos_db_endpoint,
-                    credential=settings.cosmos_db_key
+                    url=settings.effective_cosmos_endpoint,
+                    credential=settings.effective_cosmos_key
                 )
                 
                 # Get or create database
@@ -66,24 +66,24 @@ class CosmosDBConnection:
         """Get or create the database"""
         try:
             # Try to get existing database
-            database = self._client.get_database_client(settings.cosmos_db_database_name)
+            database = self._client.get_database_client(settings.effective_cosmos_database_name)
             
             # Test if database exists by reading its properties
             await asyncio.get_event_loop().run_in_executor(
                 None, database.read
             )
             
-            logger.info(f"Using existing database: {settings.cosmos_db_database_name}")
+            logger.info(f"Using existing database: {settings.effective_cosmos_database_name}")
             return database
             
         except CosmosResourceNotFoundError:
             # Database doesn't exist, create it
-            logger.info(f"Creating database: {settings.cosmos_db_database_name}")
+            logger.info(f"Creating database: {settings.effective_cosmos_database_name}")
             
             database = await asyncio.get_event_loop().run_in_executor(
                 None,
                 self._client.create_database,
-                settings.cosmos_db_database_name
+                settings.effective_cosmos_database_name
             )
             
             return database
@@ -92,19 +92,24 @@ class CosmosDBConnection:
         """Initialize all required containers"""
         container_configs = [
             {
-                "name": settings.cosmos_db_container_users,
-                "partition_key": PartitionKey(path="/id"),
+                "name": settings.cosmos_container_users,
+                "partition_key": PartitionKey(path="/userId"),
                 "default_ttl": None  # Users don't expire
             },
             {
-                "name": settings.cosmos_db_container_puzzles,
+                "name": settings.cosmos_container_puzzles,
                 "partition_key": PartitionKey(path="/universe"),
                 "default_ttl": None  # Puzzles don't expire
             },
             {
-                "name": settings.cosmos_db_container_guesses,
+                "name": settings.cosmos_container_guesses,
                 "partition_key": PartitionKey(path="/user_id"),
                 "default_ttl": 60 * 60 * 24 * 365  # Keep guesses for 1 year
+            },
+            {
+                "name": settings.cosmos_container_streaks,
+                "partition_key": PartitionKey(path="/userId"),
+                "default_ttl": None  # Streaks don't expire
             }
         ]
         
@@ -164,17 +169,22 @@ class CosmosDBConnection:
     @property
     def users_container(self) -> ContainerProxy:
         """Get the users container"""
-        return self.get_container(settings.cosmos_db_container_users)
+        return self.get_container(settings.cosmos_container_users)
     
     @property
     def puzzles_container(self) -> ContainerProxy:
         """Get the puzzles container"""
-        return self.get_container(settings.cosmos_db_container_puzzles)
+        return self.get_container(settings.cosmos_container_puzzles)
     
     @property
     def guesses_container(self) -> ContainerProxy:
         """Get the guesses container"""
-        return self.get_container(settings.cosmos_db_container_guesses)
+        return self.get_container(settings.cosmos_container_guesses)
+    
+    @property
+    def streaks_container(self) -> ContainerProxy:
+        """Get the streaks container"""
+        return self.get_container(settings.cosmos_container_streaks)
     
     async def health_check(self) -> Dict[str, Any]:
         """Perform health check on database connection"""
@@ -203,7 +213,7 @@ class CosmosDBConnection:
             
             return {
                 "status": "healthy",
-                "database": settings.cosmos_db_database_name,
+                "database": settings.effective_cosmos_database_name,
                 "containers": container_status
             }
             

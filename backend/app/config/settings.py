@@ -39,6 +39,12 @@ class Settings(BaseSettings):
     cosmos_container_puzzles: str = "puzzles"
     cosmos_container_guesses: str = "guesses"
     cosmos_container_governance: str = "governance"
+    cosmos_container_streaks: str = "streaks"
+    
+    # Alternative environment variable names for compatibility
+    cosmos_account_uri: Optional[str] = None
+    cosmos_account_key: Optional[str] = None
+    cosmos_db_name: Optional[str] = None
     
     # Storage Configuration (Azure Blob Storage)
     azure_storage_account_name: str = "devstorageaccount1"
@@ -122,7 +128,24 @@ class Settings(BaseSettings):
     @property
     def cosmos_connection_string(self) -> str:
         """Generate Cosmos DB connection string."""
-        return f"AccountEndpoint={self.cosmos_endpoint};AccountKey={self.cosmos_key};"
+        endpoint = self.cosmos_account_uri or self.cosmos_endpoint
+        key = self.cosmos_account_key or self.cosmos_key
+        return f"AccountEndpoint={endpoint};AccountKey={key};"
+    
+    @property
+    def effective_cosmos_endpoint(self) -> str:
+        """Get the effective Cosmos endpoint."""
+        return self.cosmos_account_uri or self.cosmos_endpoint
+    
+    @property
+    def effective_cosmos_key(self) -> str:
+        """Get the effective Cosmos key."""
+        return self.cosmos_account_key or self.cosmos_key
+    
+    @property
+    def effective_cosmos_database_name(self) -> str:
+        """Get the effective Cosmos database name."""
+        return self.cosmos_db_name or self.cosmos_database_name
     
     @property
     def azure_storage_connection_string(self) -> str:

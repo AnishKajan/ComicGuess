@@ -56,12 +56,13 @@ async def status_command() -> None:
     try:
         from app.config import settings
         
-        print(f"Endpoint: {settings.cosmos_db_endpoint}")
-        print(f"Database: {settings.cosmos_db_database_name}")
+        print(f"Endpoint: {settings.effective_cosmos_endpoint}")
+        print(f"Database: {settings.effective_cosmos_database_name}")
         print(f"Containers:")
-        print(f"  - Users: {settings.cosmos_db_container_users}")
-        print(f"  - Puzzles: {settings.cosmos_db_container_puzzles}")
-        print(f"  - Guesses: {settings.cosmos_db_container_guesses}")
+        print(f"  - Users: {settings.cosmos_container_users}")
+        print(f"  - Puzzles: {settings.cosmos_container_puzzles}")
+        print(f"  - Guesses: {settings.cosmos_container_guesses}")
+        print(f"  - Streaks: {settings.cosmos_container_streaks}")
         
         # Try to connect and get health status
         cosmos_db = await get_cosmos_db()

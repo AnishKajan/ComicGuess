@@ -10,6 +10,8 @@ from app.api.image_versions import router as image_versions_router
 from app.api.monitoring import router as monitoring_router
 from app.api.cache import router as cache_router
 from app.api.health import router as health_router, startup_health_checks
+from app.api.auth import router as auth_router
+from app.api.streaks import router as streaks_router
 from app.middleware.rate_limiting import rate_limit_middleware
 from app.security.threat_protection import ThreatProtectionMiddleware, CaptchaProvider
 from app.auth.middleware import add_security_headers
@@ -94,6 +96,14 @@ app = FastAPI(
         {
             "name": "security",
             "description": "Security and authentication endpoints"
+        },
+        {
+            "name": "authentication",
+            "description": "User authentication and authorization"
+        },
+        {
+            "name": "streaks",
+            "description": "User streak management"
         }
     ]
 )
@@ -151,6 +161,8 @@ app.add_middleware(
 )
 
 # Include API routers
+app.include_router(auth_router, prefix="/api")
+app.include_router(streaks_router, prefix="/api")
 app.include_router(users_router)
 app.include_router(game_router)
 app.include_router(images_router)
@@ -173,6 +185,18 @@ async def basic_health_check():
 async def startup_event():
     """Application startup event handler"""
     await startup_health_checks()
+    
+    # Quick Cosmos DB health check
+    try:
+        from app.database import get_cosmos_db
+        cosmos_db = await get_cosmos_db()
+        health_result = await cosmos_db.health_check()
+        if health_result.get("status") == "healthy":
+            print(f"✅ Cosmos DB connected: {health_result.get('database')}")
+        else:
+            print(f"⚠️  Cosmos DB issue: {health_result.get('error', 'Unknown')}")
+    except Exception as e:
+        print(f"❌ Cosmos DB connection failed: {e}")
 
 
 @app.on_event("shutdown")
