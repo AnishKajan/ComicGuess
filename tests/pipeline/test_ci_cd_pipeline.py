@@ -150,7 +150,7 @@ class TestCICDPipeline:
         assert len(production_jobs) > 0, "Missing production deployment jobs"
     
     def test_secret_usage(self, workflows_dir: Path):
-        """Test that secrets are properly used and not hardcoded."""
+        """Test that secrets are properly used and not harDCoded."""
         workflow_files = list(workflows_dir.glob("*.yml")) + list(workflows_dir.glob("*.yaml"))
         
         for workflow_file in workflow_files:
@@ -165,7 +165,7 @@ class TestCICDPipeline:
                 
             if 'password' in content.lower() or 'secret' in content.lower():
                 # Should use ${{ secrets.* }} format
-                assert '${{ secrets.' in content, f"Potential hardcoded secrets in {workflow_file}"
+                assert '${{ secrets.' in content, f"Potential harDCoded secrets in {workflow_file}"
     
     def test_deployment_validation_steps(self, workflows_dir: Path):
         """Test that deployment validation steps are included."""

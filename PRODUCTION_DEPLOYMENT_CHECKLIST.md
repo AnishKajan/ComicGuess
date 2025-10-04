@@ -8,7 +8,7 @@
 - [ ] Authentication middleware is properly implemented
 - [ ] Rate limiting is configured for all endpoints
 - [ ] CORS origins are restricted to production domains only
-- [ ] No hardcoded credentials in source code
+- [ ] No harDCoded credentials in source code
 
 ### 🛡️ Input Validation & Sanitization
 - [ ] All user inputs are validated and sanitized

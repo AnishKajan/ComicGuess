@@ -36,10 +36,10 @@ class TestPuzzleManager:
                 'active_date': '2024-01-15'
             },
             {
-                'universe': 'dc',
+                'universe': 'DC',
                 'character': 'Batman',
                 'character_aliases': 'Bruce Wayne,Dark Knight',
-                'image_key': 'dc/batman.jpg',
+                'image_key': 'DC/batman.jpg',
                 'active_date': '2024-01-16'
             }
         ]
@@ -86,11 +86,11 @@ class TestPuzzleManager:
                     active_date='2024-01-15'
                 ),
                 Puzzle(
-                    id='20240116-dc',
-                    universe='dc',
+                    id='20240116-DC',
+                    universe='DC',
                     character='Batman',
                     character_aliases=['Bruce Wayne', 'Dark Knight'],
-                    image_key='dc/batman.jpg',
+                    image_key='DC/batman.jpg',
                     active_date='2024-01-16'
                 )
             ]

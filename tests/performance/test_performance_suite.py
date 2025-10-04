@@ -184,7 +184,7 @@ class TestLoadTester:
         
         assert load_test.api_base_url == 'http://localhost:8000'
         assert len(load_test.test_users) == 1000
-        assert load_test.universes == ['marvel', 'dc', 'image']
+        assert load_test.universes == ['marvel', 'DC', 'image']
         assert len(load_test._get_random_guess()) > 0
 
 class TestSoakTester:

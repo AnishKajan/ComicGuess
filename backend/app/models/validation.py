@@ -78,7 +78,7 @@ class CharacterNameValidator:
 class UniverseValidator:
     """Utility class for validating comic universes"""
     
-    VALID_UNIVERSES: Set[str] = {"marvel", "dc", "image"}
+    VALID_UNIVERSES: Set[str] = {"marvel", "DC", "image"}
     
     @classmethod
     def is_valid_universe(cls, universe: str) -> bool:
@@ -93,7 +93,7 @@ class UniverseValidator:
 class PuzzleIdValidator:
     """Utility class for validating puzzle IDs"""
     
-    PUZZLE_ID_PATTERN = re.compile(r'^(\d{8})-(marvel|dc|image)$')
+    PUZZLE_ID_PATTERN = re.compile(r'^(\d{8})-(marvel|DC|image)$')
     
     @classmethod
     def is_valid_puzzle_id(cls, puzzle_id: str) -> bool:

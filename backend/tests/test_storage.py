@@ -39,8 +39,8 @@ class TestBlobStorageService:
         assert path == "marvel/spider-man.jpg"
         
         # Test character name with apostrophe
-        path = mock_blob_service._get_blob_path("dc", "Green Lantern")
-        assert path == "dc/green-lantern.jpg"
+        path = mock_blob_service._get_blob_path("DC", "Green Lantern")
+        assert path == "DC/green-lantern.jpg"
         
         # Test image universe
         path = mock_blob_service._get_blob_path("image", "Spawn")

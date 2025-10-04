@@ -23,7 +23,7 @@ class ImageService:
         self.cdn_base_url = self._get_cdn_base_url()
         self.fallback_images = {
             "marvel": "marvel/fallback-marvel.jpg",
-            "dc": "dc/fallback-dc.jpg", 
+            "DC": "DC/fallback-DC.jpg", 
             "image": "image/fallback-image.jpg"
         }
         # Version tracking for cache invalidation
@@ -59,7 +59,7 @@ class ImageService:
         Get optimized image URL for a character with fallback handling.
         
         Args:
-            universe: The comic universe (marvel, dc, image)
+            universe: The comic universe (marvel, DC, image)
             character_name: Name of the character
             use_cdn: Whether to use CDN URL (default: True)
             include_cache_headers: Whether to include cache control info
@@ -119,7 +119,7 @@ class ImageService:
         Get fallback image URL when character image is not available.
         
         Args:
-            universe: The comic universe (marvel, dc, image)
+            universe: The comic universe (marvel, DC, image)
             character_name: Name of the character (for logging)
             use_cdn: Whether to use CDN URL
             include_cache_headers: Whether to include cache control info
@@ -163,7 +163,7 @@ class ImageService:
         This would integrate with image processing services in production.
         
         Args:
-            universe: The comic universe (marvel, dc, image)
+            universe: The comic universe (marvel, DC, image)
             character_name: Name of the character
             width: Desired width in pixels
             height: Desired height in pixels
@@ -206,7 +206,7 @@ class ImageService:
         Get version information for an image to support cache invalidation.
         
         Args:
-            universe: The comic universe (marvel, dc, image)
+            universe: The comic universe (marvel, DC, image)
             character_name: Name of the character
             
         Returns:
@@ -262,7 +262,7 @@ class ImageService:
         This should be called when an image is updated.
         
         Args:
-            universe: The comic universe (marvel, dc, image)
+            universe: The comic universe (marvel, DC, image)
             character_name: Name of the character
             
         Returns:
@@ -290,7 +290,7 @@ class ImageService:
         Useful when doing bulk image updates.
         
         Args:
-            universe: The comic universe (marvel, dc, image)
+            universe: The comic universe (marvel, DC, image)
             
         Returns:
             Dictionary containing invalidation results
@@ -352,7 +352,7 @@ class ImageService:
         Useful for CDN warming and client-side caching.
         
         Args:
-            universe: The comic universe (marvel, dc, image)
+            universe: The comic universe (marvel, DC, image)
             
         Returns:
             Dictionary containing preload information
@@ -413,7 +413,7 @@ class ImageService:
         Validate that an image exists for a character.
         
         Args:
-            universe: The comic universe (marvel, dc, image)
+            universe: The comic universe (marvel, DC, image)
             character_name: Name of the character
             
         Returns:

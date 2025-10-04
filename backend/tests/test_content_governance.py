@@ -38,7 +38,7 @@ class TestCanonicalCharacter:
         """Test adding an alias to a character"""
         character = CanonicalCharacter(
             canonical_name="Batman",
-            universe="dc",
+            universe="DC",
             created_by="admin-123"
         )
         
@@ -56,7 +56,7 @@ class TestCanonicalCharacter:
         """Test rejecting an alias"""
         character = CanonicalCharacter(
             canonical_name="Superman",
-            universe="dc",
+            universe="DC",
             approved_aliases=["Man of Steel", "Last Son of Krypton"],
             created_by="admin-123"
         )
@@ -76,7 +76,7 @@ class TestCanonicalCharacter:
         """Test getting all valid names for a character"""
         character = CanonicalCharacter(
             canonical_name="Wonder Woman",
-            universe="dc",
+            universe="DC",
             approved_aliases=["Diana Prince", "Amazon Princess"],
             created_by="admin-123"
         )
@@ -353,7 +353,7 @@ class TestContentGovernanceService:
         """Test adding character alias"""
         character = CanonicalCharacter(
             canonical_name="Batman",
-            universe="dc",
+            universe="DC",
             created_by="admin-123"
         )
         
@@ -372,7 +372,7 @@ class TestContentGovernanceService:
         """Test checking for alias conflicts"""
         existing_character = CanonicalCharacter(
             canonical_name="Batman",
-            universe="dc",
+            universe="DC",
             approved_aliases=["Dark Knight"],
             created_by="admin-123"
         )
@@ -380,12 +380,12 @@ class TestContentGovernanceService:
         mock_governance_repo.get_canonical_characters_by_universe.return_value = [existing_character]
         
         # Check for conflict with existing alias
-        conflicts = await governance_service.check_alias_conflicts("Dark Knight", "dc")
+        conflicts = await governance_service.check_alias_conflicts("Dark Knight", "DC")
         assert len(conflicts) == 1
         assert conflicts[0]["conflicting_name"] == "Dark Knight"
         
         # Check for no conflict with unique alias
-        conflicts = await governance_service.check_alias_conflicts("Caped Crusader", "dc")
+        conflicts = await governance_service.check_alias_conflicts("Caped Crusader", "DC")
         assert len(conflicts) == 0
     
     @pytest.mark.asyncio

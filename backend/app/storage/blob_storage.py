@@ -46,7 +46,7 @@ class BlobStorageService:
         Generate blob path with universe-based folder organization.
         
         Args:
-            universe: The comic universe (marvel, dc, image)
+            universe: The comic universe (marvel, DC, image)
             character_name: Name of the character
             file_extension: File extension (default: jpg)
             
@@ -68,7 +68,7 @@ class BlobStorageService:
         Upload a character image to blob storage.
         
         Args:
-            universe: The comic universe (marvel, dc, image)
+            universe: The comic universe (marvel, DC, image)
             character_name: Name of the character
             image_data: Binary image data
             content_type: MIME type of the image
@@ -117,7 +117,7 @@ class BlobStorageService:
         Get the public URL for a character image.
         
         Args:
-            universe: The comic universe (marvel, dc, image)
+            universe: The comic universe (marvel, DC, image)
             character_name: Name of the character
             
         Returns:
@@ -143,7 +143,7 @@ class BlobStorageService:
         Delete a character image from blob storage.
         
         Args:
-            universe: The comic universe (marvel, dc, image)
+            universe: The comic universe (marvel, DC, image)
             character_name: Name of the character
             
         Returns:
@@ -169,7 +169,7 @@ class BlobStorageService:
         Get metadata for a character image including version information.
         
         Args:
-            universe: The comic universe (marvel, dc, image)
+            universe: The comic universe (marvel, DC, image)
             character_name: Name of the character
             
         Returns:
@@ -204,7 +204,7 @@ class BlobStorageService:
         Update metadata for a character image.
         
         Args:
-            universe: The comic universe (marvel, dc, image)
+            universe: The comic universe (marvel, DC, image)
             character_name: Name of the character
             metadata: Dictionary of metadata to update
             
@@ -233,7 +233,7 @@ class BlobStorageService:
         List all character images in a specific universe.
         
         Args:
-            universe: The comic universe (marvel, dc, image)
+            universe: The comic universe (marvel, DC, image)
             
         Returns:
             List of character names that have images

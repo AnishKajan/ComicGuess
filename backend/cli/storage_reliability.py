@@ -295,7 +295,7 @@ def metrics():
                 
                 universes = container_metrics.get('universes', {})
                 marvel_count = universes.get('marvel', 0)
-                dc_count = universes.get('dc', 0)
+                DC_count = universes.get('DC', 0)
                 image_count = universes.get('image', 0)
                 other_count = universes.get('other', 0)
                 
@@ -304,7 +304,7 @@ def metrics():
                     f"{blob_count:<8} "
                     f"{size_mb:<12.1f} "
                     f"{marvel_count:<8} "
-                    f"{dc_count:<8} "
+                    f"{DC_count:<8} "
                     f"{image_count:<8} "
                     f"{other_count:<8}"
                 )

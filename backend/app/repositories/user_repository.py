@@ -181,7 +181,7 @@ class UserRepository(BaseRepository[User]):
         query = """
         SELECT c.id FROM c 
         WHERE (c.last_played.marvel IS NULL OR c.last_played.marvel < @cutoff_date)
-        AND (c.last_played.dc IS NULL OR c.last_played.dc < @cutoff_date)  
+        AND (c.last_played.DC IS NULL OR c.last_played.DC < @cutoff_date)  
         AND (c.last_played.image IS NULL OR c.last_played.image < @cutoff_date)
         AND c.total_games = 0
         """

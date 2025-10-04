@@ -45,7 +45,7 @@ class TestPuzzleGeneratorService:
         pools = generator_service.character_pools
         
         assert "marvel" in pools
-        assert "dc" in pools
+        assert "DC" in pools
         assert "image" in pools
         
         # Check that each pool has characters
@@ -176,7 +176,7 @@ class TestPuzzleGeneratorService:
         
         assert result["puzzles_created"] == 1  # Only marvel succeeded
         assert len(result["universes_processed"]) == 1
-        assert len(result["errors"]) == 2  # dc and image failed
+        assert len(result["errors"]) == 2  # DC and image failed
     
     @pytest.mark.asyncio
     async def test_validate_puzzle_generation_all_exist(self, generator_service):
@@ -213,7 +213,7 @@ class TestPuzzleGeneratorService:
         result = await generator_service.validate_puzzle_generation("2024-01-15")
         
         assert result["all_puzzles_exist"] is False
-        assert len(result["missing_puzzles"]) == 2  # dc and image missing
+        assert len(result["missing_puzzles"]) == 2  # DC and image missing
         assert len(result["existing_puzzles"]) == 1  # only marvel exists
     
     @pytest.mark.asyncio
@@ -229,7 +229,7 @@ class TestPuzzleGeneratorService:
             mock_validate.return_value = {
                 "all_puzzles_exist": True,
                 "missing_puzzles": [],
-                "existing_puzzles": [{"universe": "marvel"}, {"universe": "dc"}, {"universe": "image"}]
+                "existing_puzzles": [{"universe": "marvel"}, {"universe": "DC"}, {"universe": "image"}]
             }
             
             result = await generator_service.perform_health_check()
@@ -259,7 +259,7 @@ class TestPuzzleGeneratorService:
         with patch.object(generator_service, 'generate_daily_puzzles_for_date') as mock_generate:
             mock_generate.return_value = {
                 "puzzles_created": 3,
-                "universes_processed": ["marvel", "dc", "image"],
+                "universes_processed": ["marvel", "DC", "image"],
                 "errors": []
             }
             
@@ -304,7 +304,7 @@ class TestFunctionApp:
             mock_service = Mock()
             mock_service.generate_daily_puzzles_for_date = AsyncMock(return_value={
                 "puzzles_created": 3,
-                "universes_processed": ["marvel", "dc", "image"]
+                "universes_processed": ["marvel", "DC", "image"]
             })
             mock_service_class.return_value = mock_service
             

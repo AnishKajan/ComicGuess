@@ -38,7 +38,7 @@ Examples:
   python -m cli.main image bulk-upload marvel ./images/marvel/
   
   # List images in universe
-  python -m cli.main image list dc
+  python -m cli.main image list DC
   
   # Validate puzzles
   python -m cli.main puzzle validate --universe image
@@ -60,18 +60,18 @@ Examples:
     # Puzzle export
     puzzle_export = puzzle_subparsers.add_parser('export', help='Export puzzles to file')
     puzzle_export.add_argument('file', type=Path, help='Output file')
-    puzzle_export.add_argument('--universe', choices=['marvel', 'dc', 'image'], help='Filter by universe')
+    puzzle_export.add_argument('--universe', choices=['marvel', 'DC', 'image'], help='Filter by universe')
     puzzle_export.add_argument('--start-date', help='Start date (YYYY-MM-DD)')
     puzzle_export.add_argument('--end-date', help='End date (YYYY-MM-DD)')
     puzzle_export.add_argument('--format', choices=['csv', 'json'], default='json', help='Output format')
     
     # Puzzle validate
     puzzle_validate = puzzle_subparsers.add_parser('validate', help='Validate existing puzzles')
-    puzzle_validate.add_argument('--universe', choices=['marvel', 'dc', 'image'], help='Validate specific universe')
+    puzzle_validate.add_argument('--universe', choices=['marvel', 'DC', 'image'], help='Validate specific universe')
     
     # Puzzle delete
     puzzle_delete = puzzle_subparsers.add_parser('delete', help='Delete puzzles in date range')
-    puzzle_delete.add_argument('universe', choices=['marvel', 'dc', 'image'], help='Universe to delete from')
+    puzzle_delete.add_argument('universe', choices=['marvel', 'DC', 'image'], help='Universe to delete from')
     puzzle_delete.add_argument('start_date', help='Start date (YYYY-MM-DD)')
     puzzle_delete.add_argument('end_date', help='End date (YYYY-MM-DD)')
     puzzle_delete.add_argument('--confirm', action='store_true', help='Confirm deletion')
@@ -95,7 +95,7 @@ Examples:
     
     # Image upload
     image_upload = image_subparsers.add_parser('upload', help='Upload a single image')
-    image_upload.add_argument('universe', choices=['marvel', 'dc', 'image'], help='Comic universe')
+    image_upload.add_argument('universe', choices=['marvel', 'DC', 'image'], help='Comic universe')
     image_upload.add_argument('character', help='Character name')
     image_upload.add_argument('image', type=Path, help='Image file path')
     image_upload.add_argument('--no-optimize', action='store_true', help='Skip image optimization')
@@ -103,7 +103,7 @@ Examples:
     
     # Image bulk upload
     image_bulk = image_subparsers.add_parser('bulk-upload', help='Upload multiple images from directory')
-    image_bulk.add_argument('universe', choices=['marvel', 'dc', 'image'], help='Comic universe')
+    image_bulk.add_argument('universe', choices=['marvel', 'DC', 'image'], help='Comic universe')
     image_bulk.add_argument('directory', type=Path, help='Directory containing images')
     image_bulk.add_argument('--no-optimize', action='store_true', help='Skip image optimization')
     image_bulk.add_argument('--overwrite', action='store_true', help='Overwrite existing images')
@@ -111,15 +111,15 @@ Examples:
     
     # Image list
     image_list = image_subparsers.add_parser('list', help='List images in universe')
-    image_list.add_argument('universe', choices=['marvel', 'dc', 'image'], help='Comic universe')
+    image_list.add_argument('universe', choices=['marvel', 'DC', 'image'], help='Comic universe')
     
     # Image validate
     image_validate = image_subparsers.add_parser('validate', help='Validate images in storage')
-    image_validate.add_argument('--universe', choices=['marvel', 'dc', 'image'], help='Validate specific universe')
+    image_validate.add_argument('--universe', choices=['marvel', 'DC', 'image'], help='Validate specific universe')
     
     # Image delete
     image_delete = image_subparsers.add_parser('delete', help='Delete a character image')
-    image_delete.add_argument('universe', choices=['marvel', 'dc', 'image'], help='Comic universe')
+    image_delete.add_argument('universe', choices=['marvel', 'DC', 'image'], help='Comic universe')
     image_delete.add_argument('character', help='Character name')
     image_delete.add_argument('--confirm', action='store_true', help='Confirm deletion')
     

@@ -36,7 +36,7 @@ def mock_system_stats():
         active_users_today=25,
         active_users_week=75,
         total_puzzles=300,
-        puzzles_by_universe={"marvel": 100, "dc": 100, "image": 100},
+        puzzles_by_universe={"marvel": 100, "DC": 100, "image": 100},
         total_guesses_today=150,
         total_guesses_week=800,
         success_rate_today=0.65,

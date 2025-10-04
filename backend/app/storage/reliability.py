@@ -62,7 +62,7 @@ class StorageReliabilityManager:
                             "definition": {
                                 "filters": {
                                     "blobTypes": ["blockBlob"],
-                                    "prefixMatch": ["marvel/", "dc/", "image/"]
+                                    "prefixMatch": ["marvel/", "DC/", "image/"]
                                 },
                                 "actions": {
                                     "baseBlob": {
@@ -648,7 +648,7 @@ class StorageReliabilityManager:
                         container_metrics = {
                             "blob_count": 0,
                             "total_size_bytes": 0,
-                            "universes": {"marvel": 0, "dc": 0, "image": 0, "other": 0}
+                            "universes": {"marvel": 0, "DC": 0, "image": 0, "other": 0}
                         }
                         
                         async for blob in container_client.list_blobs():
@@ -658,8 +658,8 @@ class StorageReliabilityManager:
                             # Categorize by universe
                             if blob.name.startswith("marvel/"):
                                 container_metrics["universes"]["marvel"] += 1
-                            elif blob.name.startswith("dc/"):
-                                container_metrics["universes"]["dc"] += 1
+                            elif blob.name.startswith("DC/"):
+                                container_metrics["universes"]["DC"] += 1
                             elif blob.name.startswith("image/"):
                                 container_metrics["universes"]["image"] += 1
                             else:

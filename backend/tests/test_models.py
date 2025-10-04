@@ -23,8 +23,8 @@ class TestUserModel:
         assert user.email == "test@example.com"
         assert user.total_games == 0
         assert user.total_wins == 0
-        assert user.streaks == {"marvel": 0, "dc": 0, "image": 0}
-        assert user.last_played == {"marvel": None, "dc": None, "image": None}
+        assert user.streaks == {"marvel": 0, "DC": 0, "image": 0}
+        assert user.last_played == {"marvel": None, "DC": None, "image": None}
         assert isinstance(user.created_at, datetime)
         assert len(user.id) > 0
     
@@ -72,7 +72,7 @@ class TestUserModel:
         user = User(
             username="testuser",
             email="test@example.com",
-            streaks={"marvel": 5, "dc": 2, "image": 0}
+            streaks={"marvel": 5, "DC": 2, "image": 0}
         )
         assert user.streaks["marvel"] == 5
         
@@ -82,7 +82,7 @@ class TestUserModel:
             email="test@example.com",
             streaks={"marvel": 3}
         )
-        assert user.streaks["dc"] == 0
+        assert user.streaks["DC"] == 0
         assert user.streaks["image"] == 0
         
         # Invalid streak values
@@ -90,7 +90,7 @@ class TestUserModel:
             User(
                 username="testuser",
                 email="test@example.com",
-                streaks={"marvel": -1, "dc": 0, "image": 0}
+                streaks={"marvel": -1, "DC": 0, "image": 0}
             )
     
     def test_user_total_wins_validation(self):
@@ -120,14 +120,14 @@ class TestUserModel:
             email="test@example.com",
             total_games=10,
             total_wins=7,
-            streaks={"marvel": 5, "dc": 2, "image": 0}
+            streaks={"marvel": 5, "DC": 2, "image": 0}
         )
         
         stats = UserStats.from_user(user)
         assert stats.total_games == 10
         assert stats.total_wins == 7
         assert stats.win_rate == 0.7
-        assert stats.streaks == {"marvel": 5, "dc": 2, "image": 0}
+        assert stats.streaks == {"marvel": 5, "DC": 2, "image": 0}
 
 
 class TestPuzzleModel:
@@ -153,7 +153,7 @@ class TestPuzzleModel:
     def test_puzzle_universe_validation(self):
         """Test universe validation"""
         # Valid universes
-        for universe in ["marvel", "dc", "image"]:
+        for universe in ["marvel", "DC", "image"]:
             puzzle = Puzzle(
                 id=f"20240115-{universe}",
                 universe=universe,
@@ -295,8 +295,8 @@ class TestPuzzleModel:
         puzzle_id = Puzzle.generate_id("2024-01-15", "marvel")
         assert puzzle_id == "20240115-marvel"
         
-        puzzle_id = Puzzle.generate_id("2024-12-31", "dc")
-        assert puzzle_id == "20241231-dc"
+        puzzle_id = Puzzle.generate_id("2024-12-31", "DC")
+        assert puzzle_id == "20241231-DC"
 
 
 class TestGuessModel:
@@ -522,8 +522,8 @@ class TestUserModel:
         assert user.email == "test@example.com"
         assert user.total_games == 0
         assert user.total_wins == 0
-        assert user.streaks == {"marvel": 0, "dc": 0, "image": 0}
-        assert user.last_played == {"marvel": None, "dc": None, "image": None}
+        assert user.streaks == {"marvel": 0, "DC": 0, "image": 0}
+        assert user.last_played == {"marvel": None, "DC": None, "image": None}
     
     def test_user_invalid_email(self):
         """Test user creation with invalid email"""
@@ -689,7 +689,7 @@ class TestValidationUtilities:
         """Test universe validation"""
         assert UniverseValidator.is_valid_universe("marvel")
         assert UniverseValidator.is_valid_universe("MARVEL")
-        assert UniverseValidator.is_valid_universe("dc")
+        assert UniverseValidator.is_valid_universe("DC")
         assert UniverseValidator.is_valid_universe("image")
         
         assert not UniverseValidator.is_valid_universe("invalid")
@@ -697,13 +697,13 @@ class TestValidationUtilities:
         
         # Test normalization
         assert UniverseValidator.normalize_universe("MARVEL") == "marvel"
-        assert UniverseValidator.normalize_universe("DC") == "dc"
+        assert UniverseValidator.normalize_universe("DC") == "DC"
     
     def test_puzzle_id_validator(self):
         """Test puzzle ID validation"""
         # Valid IDs
         assert PuzzleIdValidator.is_valid_puzzle_id("20240115-marvel")
-        assert PuzzleIdValidator.is_valid_puzzle_id("20241231-dc")
+        assert PuzzleIdValidator.is_valid_puzzle_id("20241231-DC")
         assert PuzzleIdValidator.is_valid_puzzle_id("20240229-image")  # Leap year
         
         # Invalid IDs

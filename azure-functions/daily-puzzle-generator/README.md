@@ -26,7 +26,7 @@ This Azure Function automatically generates daily comic character puzzles for th
 - **Auth Level**: Function key required
 - **Parameters**:
   - `date` (optional): Date in YYYY-MM-DD format (defaults to today)
-  - `universe` (optional): Specific universe (marvel/dc/image) or all if omitted
+  - `universe` (optional): Specific universe (marvel/DC/image) or all if omitted
 - **Purpose**: Manually trigger puzzle generation for testing or recovery
 
 #### Health Check
@@ -183,7 +183,7 @@ Configure Azure Monitor alerts for:
       "image_key": "marvel/spider-man.jpg"
     }
   ],
-  "dc": [...],
+  "DC": [...],
   "image": [...]
 }
 ```

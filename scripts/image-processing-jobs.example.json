@@ -13,7 +13,7 @@
   },
   {
     "source_path": "/path/to/images/batman.jpg",
-    "universe": "dc",
+    "universe": "DC",
     "character_name": "Batman",
     "is_primary": true,
     "metadata": {
@@ -37,7 +37,7 @@
   },
   {
     "source_path": "/path/to/images/wonder-woman.jpg",
-    "universe": "dc",
+    "universe": "DC",
     "character_name": "Wonder Woman",
     "is_primary": true,
     "metadata": {

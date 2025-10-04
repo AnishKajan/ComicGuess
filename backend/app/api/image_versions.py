@@ -18,7 +18,7 @@ router = APIRouter(prefix="/api/images", tags=["image-versions"])
 
 class ImageVersionRequest(BaseModel):
     """Request model for image version operations"""
-    universe: str = Field(..., description="Comic universe (marvel, dc, image)")
+    universe: str = Field(..., description="Comic universe (marvel, DC, image)")
     character_name: Optional[str] = Field(None, description="Specific character name (optional)")
     force_refresh: bool = Field(False, description="Force refresh of version information")
 
@@ -50,7 +50,7 @@ async def get_image_version(
     """
     Get version information for a specific character image
     
-    - **universe**: Comic universe (marvel, dc, image)
+    - **universe**: Comic universe (marvel, DC, image)
     - **character_name**: Name of the character
     
     Returns image version information including ETag and cache headers
@@ -106,7 +106,7 @@ async def invalidate_image_version(
     """
     Invalidate version cache for character images
     
-    - **universe**: Comic universe (marvel, dc, image)
+    - **universe**: Comic universe (marvel, DC, image)
     - **character_name**: Specific character name (optional, defaults to all in universe)
     - **force_refresh**: Force refresh of version information
     
@@ -159,7 +159,7 @@ async def get_universe_image_versions(
     """
     Get version information for all images in a universe
     
-    - **universe**: Comic universe (marvel, dc, image)
+    - **universe**: Comic universe (marvel, DC, image)
     - **limit**: Maximum number of images to return (1-200)
     - **offset**: Number of images to skip for pagination
     
@@ -220,7 +220,7 @@ async def refresh_universe_versions(
     """
     Refresh version information for all images in a universe
     
-    - **universe**: Comic universe (marvel, dc, image)
+    - **universe**: Comic universe (marvel, DC, image)
     
     Forces refresh of version information and cache invalidation
     """
@@ -282,7 +282,7 @@ async def validate_image_cache(
     """
     Validate image cache using ETag for conditional requests
     
-    - **universe**: Comic universe (marvel, dc, image)
+    - **universe**: Comic universe (marvel, DC, image)
     - **character_name**: Name of the character
     - **if_none_match**: ETag value for conditional request
     

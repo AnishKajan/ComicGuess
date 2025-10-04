@@ -117,7 +117,7 @@ async def trigger_cache_invalidation() -> None:
             "https://comicguess.app/api/daily-progress*",
             "https://comicguess.app/api/streak-status*",
             "https://comicguess.app/marvel/*",
-            "https://comicguess.app/dc/*",
+            "https://comicguess.app/DC/*",
             "https://comicguess.app/image/*"
         ]
         

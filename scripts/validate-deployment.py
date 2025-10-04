@@ -248,7 +248,7 @@ class DeploymentValidator:
             # Test API endpoints
             endpoints_to_test = [
                 ("/puzzle/today?universe=marvel", "GET"),
-                ("/puzzle/today?universe=dc", "GET"),
+                ("/puzzle/today?universe=DC", "GET"),
                 ("/puzzle/today?universe=image", "GET"),
             ]
             

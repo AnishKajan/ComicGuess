@@ -161,8 +161,8 @@ class TestInputSanitizer:
     
     def test_validate_universe_valid(self):
         """Test valid universe validation"""
-        valid_universes = ["marvel", "dc", "image", "MARVEL", "DC", "IMAGE"]
-        expected = ["marvel", "dc", "image", "marvel", "dc", "image"]
+        valid_universes = ["marvel", "DC", "image", "MARVEL", "DC", "IMAGE"]
+        expected = ["marvel", "DC", "image", "marvel", "DC", "image"]
         
         for universe, expected_result in zip(valid_universes, expected):
             result = InputSanitizer.validate_universe(universe)
@@ -170,7 +170,7 @@ class TestInputSanitizer:
     
     def test_validate_universe_invalid(self):
         """Test invalid universe validation"""
-        invalid_universes = ["disney", "vertigo", "", "marvel comics", "dc-comics"]
+        invalid_universes = ["disney", "vertigo", "", "marvel comics", "DC-comics"]
         
         for universe in invalid_universes:
             with pytest.raises(ValueError):
@@ -180,7 +180,7 @@ class TestInputSanitizer:
         """Test valid puzzle ID validation"""
         valid_ids = [
             "20240101-marvel",
-            "20231225-dc",
+            "20231225-DC",
             "20240229-image"  # Leap year
         ]
         

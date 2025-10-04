@@ -222,7 +222,7 @@ class PuzzleManager:
             puzzles = await self.puzzle_repo.get_puzzles_by_universe(universe, limit=1000)
         else:
             # Export all puzzles (this could be large)
-            for univ in ['marvel', 'dc', 'image']:
+            for univ in ['marvel', 'DC', 'image']:
                 univ_puzzles = await self.puzzle_repo.get_puzzles_by_universe(univ, limit=1000)
                 puzzles.extend(univ_puzzles)
         
@@ -289,7 +289,7 @@ class PuzzleManager:
             'errors': []
         }
         
-        universes = [universe] if universe else ['marvel', 'dc', 'image']
+        universes = [universe] if universe else ['marvel', 'DC', 'image']
         
         for univ in universes:
             puzzles = await self.puzzle_repo.get_puzzles_by_universe(univ, limit=1000)
@@ -367,18 +367,18 @@ async def main():
     # Export command
     export_parser = subparsers.add_parser('export', help='Export puzzles to file')
     export_parser.add_argument('file', type=Path, help='Output file')
-    export_parser.add_argument('--universe', choices=['marvel', 'dc', 'image'], help='Filter by universe')
+    export_parser.add_argument('--universe', choices=['marvel', 'DC', 'image'], help='Filter by universe')
     export_parser.add_argument('--start-date', help='Start date (YYYY-MM-DD)')
     export_parser.add_argument('--end-date', help='End date (YYYY-MM-DD)')
     export_parser.add_argument('--format', choices=['csv', 'json'], default='json', help='Output format')
     
     # Validate command
     validate_parser = subparsers.add_parser('validate', help='Validate existing puzzles')
-    validate_parser.add_argument('--universe', choices=['marvel', 'dc', 'image'], help='Validate specific universe')
+    validate_parser.add_argument('--universe', choices=['marvel', 'DC', 'image'], help='Validate specific universe')
     
     # Delete command
     delete_parser = subparsers.add_parser('delete', help='Delete puzzles in date range')
-    delete_parser.add_argument('universe', choices=['marvel', 'dc', 'image'], help='Universe to delete from')
+    delete_parser.add_argument('universe', choices=['marvel', 'DC', 'image'], help='Universe to delete from')
     delete_parser.add_argument('start_date', help='Start date (YYYY-MM-DD)')
     delete_parser.add_argument('end_date', help='End date (YYYY-MM-DD)')
     delete_parser.add_argument('--confirm', action='store_true', help='Confirm deletion')

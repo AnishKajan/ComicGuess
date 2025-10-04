@@ -25,8 +25,8 @@ class TestGuessValidationService:
             id="user123",
             username="testuser",
             email="test@example.com",
-            streaks={"marvel": 5, "dc": 2, "image": 0},
-            last_played={"marvel": "2024-01-14", "dc": "2024-01-13"},
+            streaks={"marvel": 5, "DC": 2, "image": 0},
+            last_played={"marvel": "2024-01-14", "DC": "2024-01-13"},
             total_games=10,
             total_wins=7
         )
@@ -260,7 +260,7 @@ class TestGuessValidationService:
                 call_args = mock_update.call_args[0]
                 updated_streaks = call_args[1]["streaks"]
                 assert updated_streaks["marvel"] == 6
-                assert updated_streaks["dc"] == 2  # Unchanged
+                assert updated_streaks["DC"] == 2  # Unchanged
     
     @pytest.mark.asyncio
     async def test_update_user_streak_incorrect_final_attempt(self, guess_service, sample_user):
@@ -325,8 +325,8 @@ class TestGuessValidationService:
                         
                         result = await guess_service.get_daily_progress("user123", "2024-01-15")
                         
-                        assert len(result) == 3  # marvel, dc, image
-                        assert all(universe in result for universe in ["marvel", "dc", "image"])
+                        assert len(result) == 3  # marvel, DC, image
+                        assert all(universe in result for universe in ["marvel", "DC", "image"])
                         
                         for universe_data in result.values():
                             assert universe_data["puzzle_available"] is True
@@ -342,11 +342,11 @@ class TestGuessValidationService:
             
             result = await guess_service.calculate_streak_statistics("user123")
             
-            assert result["current_streaks"] == {"marvel": 5, "dc": 2, "image": 0}
+            assert result["current_streaks"] == {"marvel": 5, "DC": 2, "image": 0}
             assert result["total_current_streak"] == 7
             assert result["best_universe"] == "marvel"
             assert result["best_streak_value"] == 5
-            assert result["max_streaks"] == {"marvel": 5, "dc": 2, "image": 0}
+            assert result["max_streaks"] == {"marvel": 5, "DC": 2, "image": 0}
     
     @pytest.mark.asyncio
     async def test_reset_streak(self, guess_service, sample_user):
@@ -364,7 +364,7 @@ class TestGuessValidationService:
                 call_args = mock_update.call_args[0]
                 updated_streaks = call_args[1]["streaks"]
                 assert updated_streaks["marvel"] == 0
-                assert updated_streaks["dc"] == 2  # Unchanged
+                assert updated_streaks["DC"] == 2  # Unchanged
                 assert updated_streaks["image"] == 0  # Unchanged
     
     @pytest.mark.asyncio
@@ -397,7 +397,7 @@ class TestGuessValidationService:
                 "can_guess": False,
                 "attempts_remaining": 0
             },
-            "dc": {
+            "DC": {
                 "puzzle_available": True,
                 "is_solved": False,
                 "can_guess": True,
@@ -414,7 +414,7 @@ class TestGuessValidationService:
             result = await guess_service.check_streak_maintenance("user123")
             
             assert result["marvel"]["status"] == "completed"
-            assert result["dc"]["status"] == "pending"
+            assert result["DC"]["status"] == "pending"
             assert result["image"]["status"] == "no_puzzle"
     
     def test_build_image_url(self, guess_service):

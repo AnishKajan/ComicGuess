@@ -125,7 +125,7 @@ class AdminUtils:
             },
             {
                 'id': 'user3',
-                'username': 'dc_enthusiast', 
+                'username': 'DC_enthusiast', 
                 'email': 'user3@example.com'
             }
         ]
@@ -144,7 +144,7 @@ class AdminUtils:
         
         characters = {
             'marvel': ['Spider-Man', 'Iron Man', 'Captain America', 'Thor', 'Hulk', 'Black Widow', 'Hawkeye'],
-            'dc': ['Batman', 'Superman', 'Wonder Woman', 'Flash', 'Green Lantern', 'Aquaman', 'Cyborg'],
+            'DC': ['Batman', 'Superman', 'Wonder Woman', 'Flash', 'Green Lantern', 'Aquaman', 'Cyborg'],
             'image': ['Spawn', 'Invincible', 'The Walking Dead', 'Saga', 'Chew', 'Outcast', 'Kirkman']
         }
         
@@ -396,7 +396,7 @@ class AdminUtils:
         """Backup all puzzles"""
         puzzles = []
         try:
-            for universe in ['marvel', 'dc', 'image']:
+            for universe in ['marvel', 'DC', 'image']:
                 universe_puzzles = await self.puzzle_repo.get_puzzles_by_universe(universe, limit=10000)
                 for puzzle in universe_puzzles:
                     puzzles.append(puzzle.model_dump())
@@ -419,7 +419,7 @@ class AdminUtils:
         """Backup blob storage"""
         blob_count = 0
         try:
-            for universe in ['marvel', 'dc', 'image']:
+            for universe in ['marvel', 'DC', 'image']:
                 characters = await self.blob_service.list_images_by_universe(universe)
                 for character in characters:
                     # This would need to be implemented to download and store blobs
@@ -470,7 +470,7 @@ class AdminUtils:
         stats = {'migration': 'update_puzzle_aliases', 'items_migrated': 0, 'errors': []}
         
         try:
-            for universe in ['marvel', 'dc', 'image']:
+            for universe in ['marvel', 'DC', 'image']:
                 puzzles = await self.puzzle_repo.get_puzzles_by_universe(universe, limit=10000)
                 
                 for puzzle in puzzles:
@@ -558,21 +558,21 @@ class AdminUtils:
             # This is a simplified example
             
             # Check puzzle count per universe
-            for universe in ['marvel', 'dc', 'image']:
+            for universe in ['marvel', 'DC', 'image']:
                 puzzles = await self.puzzle_repo.get_puzzles_by_universe(universe, limit=1)
                 integrity_status['checks'][f'{universe}_puzzles_exist'] = len(puzzles) > 0
             
             # Check for future puzzles
             today = datetime.utcnow().strftime('%Y-%m-%d')
             future_puzzles = 0
-            for universe in ['marvel', 'dc', 'image']:
+            for universe in ['marvel', 'DC', 'image']:
                 upcoming = await self.puzzle_repo.get_upcoming_puzzles(universe, days_ahead=30)
                 future_puzzles += len(upcoming)
             
             integrity_status['checks']['future_puzzles_available'] = future_puzzles > 0
             
             # If any critical checks fail, mark as unhealthy
-            critical_checks = ['marvel_puzzles_exist', 'dc_puzzles_exist', 'image_puzzles_exist']
+            critical_checks = ['marvel_puzzles_exist', 'DC_puzzles_exist', 'image_puzzles_exist']
             if not all(integrity_status['checks'].get(check, False) for check in critical_checks):
                 integrity_status['status'] = 'unhealthy'
         

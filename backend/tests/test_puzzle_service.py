@@ -25,10 +25,10 @@ class TestPuzzleService:
                 "aliases": ["Spidey", "Web-Slinger"],
                 "image_key": "marvel/spiderman.jpg"
             },
-            "dc": {
+            "DC": {
                 "character": "Batman",
                 "aliases": ["Dark Knight", "Caped Crusader"],
-                "image_key": "dc/batman.jpg"
+                "image_key": "DC/batman.jpg"
             },
             "image": {
                 "character": "Spawn",
@@ -54,8 +54,8 @@ class TestPuzzleService:
         puzzle_id = puzzle_service.generate_puzzle_id("2024-01-15", "marvel")
         assert puzzle_id == "20240115-marvel"
         
-        puzzle_id = puzzle_service.generate_puzzle_id("2024-12-31", "dc")
-        assert puzzle_id == "20241231-dc"
+        puzzle_id = puzzle_service.generate_puzzle_id("2024-12-31", "DC")
+        assert puzzle_id == "20241231-DC"
     
     def test_get_today_date(self, puzzle_service):
         """Test getting today's date"""
@@ -218,8 +218,8 @@ class TestPuzzleService:
         sample_puzzles = [
             Puzzle(id="20240115-marvel", universe="marvel", character="Spider-Man", 
                   character_aliases=["Spidey"], image_key="marvel/spiderman.jpg", active_date="2024-01-15"),
-            Puzzle(id="20240115-dc", universe="dc", character="Batman", 
-                  character_aliases=["Dark Knight"], image_key="dc/batman.jpg", active_date="2024-01-15"),
+            Puzzle(id="20240115-DC", universe="DC", character="Batman", 
+                  character_aliases=["Dark Knight"], image_key="DC/batman.jpg", active_date="2024-01-15"),
             Puzzle(id="20240115-image", universe="image", character="Spawn", 
                   character_aliases=["Al Simmons"], image_key="image/spawn.jpg", active_date="2024-01-15")
         ]
@@ -237,7 +237,7 @@ class TestPuzzleService:
             # Verify each universe was called
             call_args_list = [call[1] for call in mock_create.call_args_list]
             universes_called = [args['universe'] for args in call_args_list]
-            assert set(universes_called) == {"marvel", "dc", "image"}
+            assert set(universes_called) == {"marvel", "DC", "image"}
     
     @pytest.mark.asyncio
     async def test_generate_daily_puzzles_with_duplicate(self, puzzle_service, sample_puzzle_data):
@@ -295,8 +295,8 @@ class TestPuzzleService:
         availability_map = {
             ("marvel", "2024-01-15"): True,
             ("marvel", "2024-01-16"): False,
-            ("dc", "2024-01-15"): False,
-            ("dc", "2024-01-16"): True,
+            ("DC", "2024-01-15"): False,
+            ("DC", "2024-01-16"): True,
             ("image", "2024-01-15"): True,
             ("image", "2024-01-16"): True,
         }
@@ -308,7 +308,7 @@ class TestPuzzleService:
             missing = await puzzle_service.get_missing_puzzles("2024-01-15", "2024-01-16")
             
             assert "2024-01-16" in missing["marvel"]
-            assert "2024-01-15" in missing["dc"]
+            assert "2024-01-15" in missing["DC"]
             assert len(missing["image"]) == 0
     
     @pytest.mark.asyncio
@@ -323,10 +323,10 @@ class TestPuzzleService:
                 "active_date": "2024-01-15"
             },
             {
-                "universe": "dc",
+                "universe": "DC",
                 "character": "Batman",
                 "aliases": ["Dark Knight"],
-                "image_key": "dc/batman.jpg",
+                "image_key": "DC/batman.jpg",
                 "active_date": "2024-01-15"
             }
         ]
@@ -334,8 +334,8 @@ class TestPuzzleService:
         expected_puzzles = [
             Puzzle(id="20240115-marvel", universe="marvel", character="Spider-Man", 
                   character_aliases=["Spidey"], image_key="marvel/spiderman.jpg", active_date="2024-01-15"),
-            Puzzle(id="20240115-dc", universe="dc", character="Batman", 
-                  character_aliases=["Dark Knight"], image_key="dc/batman.jpg", active_date="2024-01-15")
+            Puzzle(id="20240115-DC", universe="DC", character="Batman", 
+                  character_aliases=["Dark Knight"], image_key="DC/batman.jpg", active_date="2024-01-15")
         ]
         
         with patch.object(puzzle_service.puzzle_repository, 'bulk_create_puzzles', new_callable=AsyncMock) as mock_bulk:

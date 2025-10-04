@@ -26,7 +26,7 @@ async def get_character_image(
     Get character image URL with optional optimization parameters.
     
     Args:
-        universe: Comic universe (marvel, dc, image)
+        universe: Comic universe (marvel, DC, image)
         character_name: Name of the character
         width: Optional image width
         height: Optional image height
@@ -38,7 +38,7 @@ async def get_character_image(
         Image information with URL and metadata
     """
     # Validate universe
-    valid_universes = ["marvel", "dc", "image"]
+    valid_universes = ["marvel", "DC", "image"]
     if universe.lower() not in valid_universes:
         raise HTTPException(
             status_code=400,
@@ -89,14 +89,14 @@ async def preload_universe_images(
     Get all image URLs for a universe for preloading.
     
     Args:
-        universe: Comic universe (marvel, dc, image)
+        universe: Comic universe (marvel, DC, image)
         response: FastAPI response object for headers
         
     Returns:
         List of all character images in the universe
     """
     # Validate universe
-    valid_universes = ["marvel", "dc", "image"]
+    valid_universes = ["marvel", "DC", "image"]
     if universe.lower() not in valid_universes:
         raise HTTPException(
             status_code=400,
@@ -131,14 +131,14 @@ async def validate_character_image(
     Validate that an image exists for a character.
     
     Args:
-        universe: Comic universe (marvel, dc, image)
+        universe: Comic universe (marvel, DC, image)
         character_name: Name of the character
         
     Returns:
         Validation result
     """
     # Validate universe
-    valid_universes = ["marvel", "dc", "image"]
+    valid_universes = ["marvel", "DC", "image"]
     if universe.lower() not in valid_universes:
         raise HTTPException(
             status_code=400,

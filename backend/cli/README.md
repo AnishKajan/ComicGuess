@@ -66,7 +66,7 @@ python -m cli.main puzzle export marvel_puzzles.csv --universe marvel --format c
 
 Export puzzles in date range:
 ```bash
-python -m cli.main puzzle export january_puzzles.json --universe dc --start-date 2024-01-01 --end-date 2024-01-31
+python -m cli.main puzzle export january_puzzles.json --universe DC --start-date 2024-01-01 --end-date 2024-01-31
 ```
 
 #### Validate Puzzles
@@ -99,7 +99,7 @@ python -m cli.main image upload marvel "Spider-Man" spider-man.jpg
 
 Upload without optimization:
 ```bash
-python -m cli.main image upload dc "Batman" batman.png --no-optimize
+python -m cli.main image upload DC "Batman" batman.png --no-optimize
 ```
 
 Overwrite existing image:
@@ -116,7 +116,7 @@ python -m cli.main image bulk-upload marvel ./images/marvel/
 
 Dry run to validate images:
 ```bash
-python -m cli.main image bulk-upload dc ./images/dc/ --dry-run
+python -m cli.main image bulk-upload DC ./images/DC/ --dry-run
 ```
 
 #### List Images
@@ -135,7 +135,7 @@ python -m cli.main image validate
 
 Validate specific universe:
 ```bash
-python -m cli.main image validate --universe dc
+python -m cli.main image validate --universe DC
 ```
 
 #### Delete Image
@@ -207,7 +207,7 @@ python -m cli.main admin health
 ```csv
 universe,character,character_aliases,image_key,active_date
 marvel,Spider-Man,"Spiderman,Peter Parker",marvel/spider-man.jpg,2024-01-15
-dc,Batman,"Bruce Wayne,Dark Knight",dc/batman.jpg,2024-01-16
+DC,Batman,"Bruce Wayne,Dark Knight",DC/batman.jpg,2024-01-16
 image,Spawn,"Al Simmons",image/spawn.jpg,2024-01-17
 ```
 
@@ -223,10 +223,10 @@ image,Spawn,"Al Simmons",image/spawn.jpg,2024-01-17
     "active_date": "2024-01-15"
   },
   {
-    "universe": "dc",
+    "universe": "DC",
     "character": "Batman",
     "character_aliases": ["Bruce Wayne", "Dark Knight"],
-    "image_key": "dc/batman.jpg",
+    "image_key": "DC/batman.jpg",
     "active_date": "2024-01-16"
   }
 ]
@@ -275,7 +275,7 @@ images/
 │   ├── spider-man.jpg
 │   ├── iron-man.jpg
 │   └── captain-america.jpg
-├── dc/
+├── DC/
 │   ├── batman.jpg
 │   ├── superman.jpg
 │   └── wonder-woman.jpg

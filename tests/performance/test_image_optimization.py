@@ -224,14 +224,14 @@ class TestImageProcessingWorkflow:
         
         job = ImageProcessingJob(
             source_path='/test/image.jpg',
-            universe='dc',
+            universe='DC',
             character_name='Batman',
             is_primary=True,
             metadata={'artist': 'Test Artist', 'year': '2024'}
         )
         
         assert job.source_path == '/test/image.jpg'
-        assert job.universe == 'dc'
+        assert job.universe == 'DC'
         assert job.character_name == 'Batman'
         assert job.is_primary is True
         assert job.metadata['artist'] == 'Test Artist'

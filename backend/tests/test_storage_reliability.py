@@ -335,7 +335,7 @@ class TestStorageReliabilityManager:
         # Mock blobs in different universes
         mock_blobs = [
             Mock(name="marvel/spider-man.jpg", size=1024),
-            Mock(name="dc/batman.jpg", size=2048),
+            Mock(name="DC/batman.jpg", size=2048),
             Mock(name="image/spawn.jpg", size=1536),
             Mock(name="other/test.jpg", size=512)
         ]
@@ -358,7 +358,7 @@ class TestStorageReliabilityManager:
             for container_name, container_metrics in metrics["containers"].items():
                 if "universes" in container_metrics:
                     assert "marvel" in container_metrics["universes"]
-                    assert "dc" in container_metrics["universes"]
+                    assert "DC" in container_metrics["universes"]
                     assert "image" in container_metrics["universes"]
                     assert "other" in container_metrics["universes"]
     

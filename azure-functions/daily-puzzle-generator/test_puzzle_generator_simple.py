@@ -12,7 +12,7 @@ class MockPuzzleGeneratorService:
     """Mock version of PuzzleGeneratorService for testing core logic"""
     
     def __init__(self):
-        self.universes = ["marvel", "dc", "image"]
+        self.universes = ["marvel", "DC", "image"]
         self.character_pools = {
             "marvel": [
                 {
@@ -26,16 +26,16 @@ class MockPuzzleGeneratorService:
                     "image_key": "marvel/iron-man.jpg"
                 }
             ],
-            "dc": [
+            "DC": [
                 {
                     "character": "Batman",
                     "aliases": ["Bruce Wayne", "Dark Knight"],
-                    "image_key": "dc/batman.jpg"
+                    "image_key": "DC/batman.jpg"
                 },
                 {
                     "character": "Superman",
                     "aliases": ["Clark Kent", "Man of Steel"],
-                    "image_key": "dc/superman.jpg"
+                    "image_key": "DC/superman.jpg"
                 }
             ],
             "image": [
@@ -75,7 +75,7 @@ class TestPuzzleGeneratorLogic:
         """Test character pools have correct structure"""
         assert len(generator.universes) == 3
         assert "marvel" in generator.character_pools
-        assert "dc" in generator.character_pools
+        assert "DC" in generator.character_pools
         assert "image" in generator.character_pools
         
         for universe, characters in generator.character_pools.items():
@@ -122,12 +122,12 @@ class TestPuzzleGeneratorLogic:
         date = "2024-01-15"
         
         marvel_char = await generator.select_character_for_date("marvel", date)
-        dc_char = await generator.select_character_for_date("dc", date)
+        DC_char = await generator.select_character_for_date("DC", date)
         image_char = await generator.select_character_for_date("image", date)
         
         # Each should be from correct universe
         assert marvel_char["image_key"].startswith("marvel/")
-        assert dc_char["image_key"].startswith("dc/")
+        assert DC_char["image_key"].startswith("DC/")
         assert image_char["image_key"].startswith("image/")
     
     @pytest.mark.asyncio
@@ -146,8 +146,8 @@ class TestPuzzleGeneratorLogic:
         puzzle_id = generate_puzzle_id("2024-01-15", "marvel")
         assert puzzle_id == "20240115-marvel"
         
-        puzzle_id = generate_puzzle_id("2024-12-31", "dc")
-        assert puzzle_id == "20241231-dc"
+        puzzle_id = generate_puzzle_id("2024-12-31", "DC")
+        assert puzzle_id == "20241231-DC"
     
     def test_date_formatting(self):
         """Test date formatting utilities"""
@@ -199,7 +199,7 @@ class TestFunctionAppLogic:
         success_result = {
             "success": True,
             "puzzles_created": 3,
-            "universes_processed": ["marvel", "dc", "image"],
+            "universes_processed": ["marvel", "DC", "image"],
             "date": "2024-01-15",
             "timestamp": datetime.utcnow().isoformat()
         }

@@ -160,7 +160,7 @@ class TestAPIContracts:
             pytest.skip("No auth token provided")
         
         # Test with different universe parameters
-        universes = ["marvel", "dc", "image"]
+        universes = ["marvel", "DC", "image"]
         
         for universe in universes:
             # This might return 404 if no puzzle exists, which is valid

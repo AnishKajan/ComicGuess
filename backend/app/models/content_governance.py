@@ -36,7 +36,7 @@ class CanonicalCharacter(BaseModel):
     """Canonical character name with approved aliases"""
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     canonical_name: str = Field(..., description="Official canonical character name")
-    universe: str = Field(..., pattern="^(marvel|dc|image)$")
+    universe: str = Field(..., pattern="^(marvel|DC|image)$")
     approved_aliases: List[str] = Field(default_factory=list, description="Approved alternative names")
     rejected_aliases: List[str] = Field(default_factory=list, description="Rejected alternative names")
     created_at: datetime = Field(default_factory=datetime.utcnow)
@@ -312,7 +312,7 @@ class ContentGovernanceRule(BaseModel):
     name: str = Field(..., description="Rule name")
     description: str = Field(..., description="Rule description")
     rule_type: str = Field(..., description="Type of rule (validation, approval, etc.)")
-    universe: Optional[str] = Field(None, pattern="^(marvel|dc|image|all)$")
+    universe: Optional[str] = Field(None, pattern="^(marvel|DC|image|all)$")
     is_active: bool = Field(default=True)
     severity: str = Field(default="warning", pattern="^(info|warning|error|critical)$")
     

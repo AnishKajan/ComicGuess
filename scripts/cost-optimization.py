@@ -114,14 +114,14 @@ class CostOptimizer:
                 resource_uri=storage_account.id,
                 timespan=f"{start_time.isoformat()}/{end_time.isoformat()}",
                 interval='P1D',
-                metricnames='UsedCapacity,Transactions,Egress',
+                metricnames='UseDCapacity,Transactions,Egress',
                 aggregation='Average,Total'
             )
             
             recommendations = []
             
             for metric in metrics.value:
-                if metric.name.value == 'UsedCapacity':
+                if metric.name.value == 'UseDCapacity':
                     avg_capacity_gb = sum(point.average for point in metric.timeseries[0].data if point.average) / (1024**3) / len(metric.timeseries[0].data)
                     
                     # Recommend storage tier based on access patterns

@@ -42,9 +42,9 @@ jobs:
         run: |
           echo "🔒 Checking for workflow security issues..."
           
-          # Check for hardcoded secrets
+          # Check for harDCoded secrets
           if grep -r "password\|secret\|key" .github/workflows/ --include="*.yml" --include="*.yaml" | grep -v "\${{"; then
-            echo "❌ Found potential hardcoded secrets in workflows"
+            echo "❌ Found potential harDCoded secrets in workflows"
             exit 1
           fi
           

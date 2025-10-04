@@ -79,7 +79,7 @@ class CloudflareCacheService:
                 paths_to_purge.extend(self.puzzle_cache_paths)
                 paths_to_purge.extend([
                     "/marvel/*",
-                    "/dc/*", 
+                    "/DC/*", 
                     "/image/*"
                 ])
             
@@ -118,7 +118,7 @@ class CloudflareCacheService:
         Invalidate image cache for character images
         
         Args:
-            universe: Comic universe (marvel, dc, image)
+            universe: Comic universe (marvel, DC, image)
             character_name: Specific character name (optional)
             
         Returns:

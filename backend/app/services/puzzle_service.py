@@ -17,7 +17,7 @@ class PuzzleService:
     
     def __init__(self):
         self.puzzle_repository = PuzzleRepository()
-        self.universes = ["marvel", "dc", "image"]
+        self.universes = ["marvel", "DC", "image"]
     
     def generate_puzzle_id(self, date: str, universe: str) -> str:
         """Generate puzzle ID in format YYYYMMDD-universe"""
@@ -86,7 +86,7 @@ class PuzzleService:
             character_data: Dict with universe as key and character info as value
                           Format: {
                               "marvel": {"character": "Spider-Man", "aliases": ["Spidey"], "image_key": "marvel/spiderman.jpg"},
-                              "dc": {"character": "Batman", "aliases": ["Dark Knight"], "image_key": "dc/batman.jpg"},
+                              "DC": {"character": "Batman", "aliases": ["Dark Knight"], "image_key": "DC/batman.jpg"},
                               "image": {"character": "Spawn", "aliases": [], "image_key": "image/spawn.jpg"}
                           }
             active_date: Date for puzzles (defaults to today)

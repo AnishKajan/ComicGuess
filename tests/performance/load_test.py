@@ -153,7 +153,7 @@ class ComicGuessLoadTest:
         self.api_base_url = api_base_url
         self.frontend_base_url = frontend_base_url
         self.test_users = self._generate_test_users()
-        self.universes = ['marvel', 'dc', 'image']
+        self.universes = ['marvel', 'DC', 'image']
         
     def _generate_test_users(self) -> List[str]:
         """Generate test user IDs for load testing."""
@@ -172,7 +172,7 @@ class ComicGuessLoadTest:
         """Test the daily puzzle endpoint under load."""
         async with LoadTester(self.api_base_url, max_concurrent=100) as tester:
             # Simulate realistic traffic: 50% Marvel, 30% DC, 20% Image
-            universe_weights = {'marvel': 0.5, 'dc': 0.3, 'image': 0.2}
+            universe_weights = {'marvel': 0.5, 'DC': 0.3, 'image': 0.2}
             universe = random.choices(
                 list(universe_weights.keys()),
                 weights=list(universe_weights.values())

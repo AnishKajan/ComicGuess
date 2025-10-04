@@ -39,7 +39,7 @@ class Guess(BaseModel):
         if not v.strip():
             raise ValueError('Puzzle ID cannot be empty')
         # Should match YYYYMMDD-universe format
-        pattern = r'^\d{8}-(marvel|dc|image)$'
+        pattern = r'^\d{8}-(marvel|DC|image)$'
         if not re.match(pattern, v):
             raise ValueError('Puzzle ID must be in format YYYYMMDD-universe')
         return v
@@ -75,7 +75,7 @@ class GuessCreate(BaseModel):
     def validate_puzzle_id(cls, v):
         if not v.strip():
             raise ValueError('Puzzle ID cannot be empty')
-        pattern = r'^\d{8}-(marvel|dc|image)$'
+        pattern = r'^\d{8}-(marvel|DC|image)$'
         if not re.match(pattern, v):
             raise ValueError('Puzzle ID must be in format YYYYMMDD-universe')
         return v

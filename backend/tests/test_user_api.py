@@ -50,8 +50,8 @@ class TestUserAPI:
             email="test@example.com",
             total_games=10,
             total_wins=7,
-            streaks={"marvel": 3, "dc": 1, "image": 0},
-            last_played={"marvel": "2024-01-15", "dc": "2024-01-14", "image": None}
+            streaks={"marvel": 3, "DC": 1, "image": 0},
+            last_played={"marvel": "2024-01-15", "DC": "2024-01-14", "image": None}
         )
     
     @pytest.fixture

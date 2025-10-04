@@ -26,7 +26,7 @@ def ip_compliance():
     pass
 
 @ip_compliance.command()
-@click.option('--universe', type=click.Choice(['marvel', 'dc', 'image', 'all']), default='all',
+@click.option('--universe', type=click.Choice(['marvel', 'DC', 'image', 'all']), default='all',
               help='Universe to generate attributions for')
 @click.option('--dry-run', is_flag=True, help='Show what would be created without actually creating')
 async def generate_attributions(universe: str, dry_run: bool):
@@ -140,7 +140,7 @@ async def compliance_report(format: str, output: Optional[str]):
         click.echo(f"Error generating report: {e}", err=True)
 
 @ip_compliance.command()
-@click.option('--universe', type=click.Choice(['marvel', 'dc', 'image']), required=True,
+@click.option('--universe', type=click.Choice(['marvel', 'DC', 'image']), required=True,
               help='Universe to generate report for')
 async def universe_report(universe: str):
     """Generate attribution report for specific universe"""

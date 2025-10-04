@@ -34,7 +34,7 @@ class PuzzleGeneratorService:
         # Initialize settings from environment variables
         self.settings = Settings()
         self.puzzle_service = PuzzleService()
-        self.universes = ["marvel", "dc", "image"]
+        self.universes = ["marvel", "DC", "image"]
         
         # Initialize validation and error handling
         self.validator = PuzzleValidator()
@@ -81,31 +81,31 @@ class PuzzleGeneratorService:
                     "image_key": "marvel/hulk.jpg"
                 }
             ],
-            "dc": [
+            "DC": [
                 {
                     "character": "Batman",
                     "aliases": ["Bruce Wayne", "Dark Knight", "Caped Crusader"],
-                    "image_key": "dc/batman.jpg"
+                    "image_key": "DC/batman.jpg"
                 },
                 {
                     "character": "Superman",
                     "aliases": ["Clark Kent", "Man of Steel", "Kal-El"],
-                    "image_key": "dc/superman.jpg"
+                    "image_key": "DC/superman.jpg"
                 },
                 {
                     "character": "Wonder Woman",
                     "aliases": ["Diana Prince", "Amazon Princess"],
-                    "image_key": "dc/wonder-woman.jpg"
+                    "image_key": "DC/wonder-woman.jpg"
                 },
                 {
                     "character": "The Flash",
                     "aliases": ["Barry Allen", "Scarlet Speedster"],
-                    "image_key": "dc/flash.jpg"
+                    "image_key": "DC/flash.jpg"
                 },
                 {
                     "character": "Green Lantern",
                     "aliases": ["Hal Jordan", "Emerald Knight"],
-                    "image_key": "dc/green-lantern.jpg"
+                    "image_key": "DC/green-lantern.jpg"
                 }
             ],
             "image": [
@@ -213,7 +213,7 @@ class PuzzleGeneratorService:
         Generate a puzzle for a specific universe and date with comprehensive validation
         
         Args:
-            universe: Universe name (marvel, dc, image)
+            universe: Universe name (marvel, DC, image)
             date: Date in YYYY-MM-DD format
             
         Returns:

@@ -197,7 +197,7 @@ class PerformanceMonitor:
         # Define endpoints to test
         test_endpoints = [
             {'endpoint': '/puzzle/today?universe=marvel', 'method': 'GET'},
-            {'endpoint': '/puzzle/today?universe=dc', 'method': 'GET'},
+            {'endpoint': '/puzzle/today?universe=DC', 'method': 'GET'},
             {'endpoint': '/puzzle/today?universe=image', 'method': 'GET'},
             {
                 'endpoint': '/guess',

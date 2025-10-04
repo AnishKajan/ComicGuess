@@ -252,7 +252,7 @@ function auditRateLimiting() {
 function auditSecrets() {
   console.log('\n🔑 Auditing Secrets Management...');
   
-  // Check for hardcoded secrets
+  // Check for harDCoded secrets
   const filesToCheck = [
     'backend/main.py',
     'backend/app/config/settings.py',
@@ -272,7 +272,7 @@ function auditSecrets() {
       if (content) {
         secretPatterns.forEach(pattern => {
           if (pattern.test(content)) {
-            addIssue('Secrets', 'warning', 'Potential hardcoded secret found', file);
+            addIssue('Secrets', 'warning', 'Potential harDCoded secret found', file);
           }
         });
       }

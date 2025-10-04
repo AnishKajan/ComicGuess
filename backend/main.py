@@ -125,6 +125,7 @@ app.middleware("http")(rate_limit_middleware)
 allowed_origins = [
     "http://localhost:3000",  # Local development
     "https://localhost:3000",  # Local HTTPS development
+    "http://127.0.0.1:3000",  # Local development (127.0.0.1)
 ]
 
 # Add production origins from environment

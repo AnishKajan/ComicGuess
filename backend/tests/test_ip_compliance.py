@@ -83,7 +83,7 @@ class TestAttributionModels:
     def test_get_rights_holder_from_universe(self):
         """Test rights holder mapping from universe"""
         assert get_rights_holder_from_universe("marvel") == RightsHolder.MARVEL
-        assert get_rights_holder_from_universe("dc") == RightsHolder.DC
+        assert get_rights_holder_from_universe("DC") == RightsHolder.DC
         assert get_rights_holder_from_universe("image") == RightsHolder.IMAGE
         assert get_rights_holder_from_universe("unknown") == RightsHolder.OTHER
 
@@ -120,7 +120,7 @@ class TestIPComplianceService:
         mock_attr_repo.return_value.create_attribution.return_value = AsyncMock()
         
         service = IPComplianceService()
-        await service.ensure_character_attribution("Batman", "dc")
+        await service.ensure_character_attribution("Batman", "DC")
         
         mock_attr_repo.return_value.create_attribution.assert_called_once()
         

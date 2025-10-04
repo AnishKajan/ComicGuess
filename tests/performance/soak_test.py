@@ -227,7 +227,7 @@ class ComicGuessSoakTest:
     def __init__(self, api_base_url: str):
         self.api_base_url = api_base_url
         self.test_users = [f"soak-test-user-{i:04d}" for i in range(100)]
-        self.universes = ['marvel', 'dc', 'image']
+        self.universes = ['marvel', 'DC', 'image']
     
     async def run_daily_usage_simulation(self, duration_hours: float = 8.0) -> SoakTestResult:
         """Simulate daily usage patterns over extended period."""

@@ -89,7 +89,7 @@
 
   - Create Azure Blob Storage connection and configuration
   - Implement image upload and retrieval functions
-  - Build universe-based folder organization (marvel/, dc/, image/)
+  - Build universe-based folder organization (marvel/, DC/, image/)
   - Write tests for image storage operations
   - _Requirements: 5.2, 5.4_
 

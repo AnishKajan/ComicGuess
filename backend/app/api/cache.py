@@ -73,7 +73,7 @@ async def invalidate_image_cache(
     """
     Invalidate character image cache
     
-    - **universe**: Comic universe (marvel, dc, image) - required for image cache
+    - **universe**: Comic universe (marvel, DC, image) - required for image cache
     - **character_name**: Specific character name (optional, defaults to all in universe)
     
     Returns cache invalidation result with success status
@@ -171,7 +171,7 @@ async def warm_cache(
         # This would typically make requests to key endpoints to populate cache
         # For now, return a placeholder response
         
-        universes_to_warm = [universe] if universe else ["marvel", "dc", "image"]
+        universes_to_warm = [universe] if universe else ["marvel", "DC", "image"]
         
         # Validate universes
         for u in universes_to_warm:

@@ -12,11 +12,11 @@ class User(BaseModel):
     email: str = Field(..., description="User's email address")
     created_at: datetime = Field(default_factory=datetime.utcnow, description="Account creation timestamp")
     streaks: Dict[str, int] = Field(
-        default_factory=lambda: {"marvel": 0, "dc": 0, "image": 0},
+        default_factory=lambda: {"marvel": 0, "DC": 0, "image": 0},
         description="Current streaks per universe"
     )
     last_played: Dict[str, Optional[str]] = Field(
-        default_factory=lambda: {"marvel": None, "dc": None, "image": None},
+        default_factory=lambda: {"marvel": None, "DC": None, "image": None},
         description="Last played date per universe (YYYY-MM-DD)"
     )
     total_games: int = Field(default=0, ge=0, description="Total number of games played")
@@ -48,7 +48,7 @@ class User(BaseModel):
     @classmethod
     def validate_streaks(cls, v):
         """Ensure all required universes are present in streaks"""
-        required_universes = {"marvel", "dc", "image"}
+        required_universes = {"marvel", "DC", "image"}
         if not isinstance(v, dict):
             raise ValueError('Streaks must be a dictionary')
         
@@ -65,7 +65,7 @@ class User(BaseModel):
     @classmethod
     def validate_last_played(cls, v):
         """Ensure all required universes are present in last_played"""
-        required_universes = {"marvel", "dc", "image"}
+        required_universes = {"marvel", "DC", "image"}
         if not isinstance(v, dict):
             raise ValueError('Last played must be a dictionary')
         

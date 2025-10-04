@@ -97,15 +97,15 @@ class TestImageService:
         assert result["cache_control"] == "public, max-age=86400"
     
     @pytest.mark.asyncio
-    async def test_get_fallback_image_dc(self, mock_image_service):
+    async def test_get_fallback_image_DC(self, mock_image_service):
         """Test DC-specific fallback image."""
         service, mock_blob_service = mock_image_service
         
-        result = await service._get_fallback_image("dc", "Test Character")
+        result = await service._get_fallback_image("DC", "Test Character")
         
         assert result["is_fallback"] is True
-        assert result["universe"] == "dc"
-        assert "DC" in result["url"] or "dc" in result["url"]
+        assert result["universe"] == "DC"
+        assert "DC" in result["url"] or "DC" in result["url"]
     
     @pytest.mark.asyncio
     async def test_get_fallback_image_image_comics(self, mock_image_service):

@@ -17,7 +17,7 @@
   "devDependencies": {
     "concurrently": "^8.2.2"
   },
-  "keywords": ["comic", "puzzle", "game", "wordle", "marvel", "dc"],
+  "keywords": ["comic", "puzzle", "game", "wordle", "marvel", "DC"],
   "author": "ComicGuess Team",
   "license": "MIT"
 }

@@ -146,17 +146,17 @@ async def get_universe_attribution_report(
     Generate attribution report for a specific universe.
     
     Args:
-        universe: Universe name (marvel, dc, image)
+        universe: Universe name (marvel, DC, image)
         current_user: Authenticated user
         db: Database connection
         
     Returns:
         Universe attribution report
     """
-    if universe not in ["marvel", "dc", "image"]:
+    if universe not in ["marvel", "DC", "image"]:
         raise HTTPException(
             status_code=400,
-            detail="Universe must be one of: marvel, dc, image"
+            detail="Universe must be one of: marvel, DC, image"
         )
     
     try:

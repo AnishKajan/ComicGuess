@@ -22,8 +22,8 @@ def mock_user():
         id="test-user-123",
         username="testuser",
         created_at=datetime(2024, 1, 1, tzinfo=timezone.utc),
-        streaks={"marvel": 5, "dc": 3, "image": 0},
-        last_played={"marvel": "2024-01-15", "dc": "2024-01-14"},
+        streaks={"marvel": 5, "DC": 3, "image": 0},
+        last_played={"marvel": "2024-01-15", "DC": "2024-01-14"},
         total_games=10,
         total_wins=8
     )
@@ -44,7 +44,7 @@ def mock_guesses():
         Guess(
             id="guess-2",
             user_id="test-user-123",
-            puzzle_id="20240115-dc",
+            puzzle_id="20240115-DC",
             guess="Batman",
             is_correct=True,
             timestamp=datetime(2024, 1, 15, 11, 0, tzinfo=timezone.utc),
@@ -64,12 +64,12 @@ def mock_puzzles():
             image_key="marvel/spider-man.jpg",
             active_date="2024-01-15"
         ),
-        "20240115-dc": Puzzle(
-            id="20240115-dc",
-            universe="dc",
+        "20240115-DC": Puzzle(
+            id="20240115-DC",
+            universe="DC",
             character="Batman",
             character_aliases=["Bruce Wayne", "Dark Knight"],
-            image_key="dc/batman.jpg",
+            image_key="DC/batman.jpg",
             active_date="2024-01-15"
         )
     }
@@ -122,7 +122,7 @@ class TestDataExportAPI:
         user_profile = export_data["user_profile"]
         assert user_profile["id"] == "test-user-123"
         assert user_profile["username"] == "testuser"
-        assert user_profile["streaks"] == {"marvel": 5, "dc": 3, "image": 0}
+        assert user_profile["streaks"] == {"marvel": 5, "DC": 3, "image": 0}
         
         # Verify gameplay history
         gameplay_history = export_data["gameplay_history"]

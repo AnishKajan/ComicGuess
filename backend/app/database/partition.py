@@ -18,7 +18,7 @@ class PartitionKeyManager:
     @staticmethod
     def get_puzzle_partition_key(universe: str) -> str:
         """Get partition key for puzzle documents"""
-        # Puzzles are partitioned by universe (marvel, dc, image)
+        # Puzzles are partitioned by universe (marvel, DC, image)
         return universe.lower()
     
     @staticmethod
@@ -53,7 +53,7 @@ class PartitionKeyManager:
         
         elif document_type == "puzzle":
             # Puzzle partition keys should be valid universes
-            valid_universes = {"marvel", "dc", "image"}
+            valid_universes = {"marvel", "DC", "image"}
             return partition_key.lower() in valid_universes
         
         elif document_type == "guess":

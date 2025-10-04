@@ -209,7 +209,7 @@ async def get_user_details(
 async def get_puzzles(
     admin_user: AdminUser = Depends(require_view_puzzles),
     request: Request = None,
-    universe: Optional[str] = Query(None, pattern="^(marvel|dc|image)$"),
+    universe: Optional[str] = Query(None, pattern="^(marvel|DC|image)$"),
     limit: int = Query(50, ge=1, le=100),
     offset: int = Query(0, ge=0)
 ):
@@ -392,7 +392,7 @@ async def get_system_statistics() -> SystemStats:
         # Get puzzles by universe
         puzzles_by_universe = {
             "marvel": await puzzle_repo.get_puzzle_count_by_universe("marvel"),
-            "dc": await puzzle_repo.get_puzzle_count_by_universe("dc"),
+            "DC": await puzzle_repo.get_puzzle_count_by_universe("DC"),
             "image": await puzzle_repo.get_puzzle_count_by_universe("image")
         }
         
@@ -420,7 +420,7 @@ async def get_system_statistics() -> SystemStats:
             active_users_today=0,
             active_users_week=0,
             total_puzzles=0,
-            puzzles_by_universe={"marvel": 0, "dc": 0, "image": 0},
+            puzzles_by_universe={"marvel": 0, "DC": 0, "image": 0},
             total_guesses_today=0,
             total_guesses_week=0,
             success_rate_today=0.0,
@@ -436,7 +436,7 @@ async def get_system_statistics() -> SystemStats:
 async def get_canonical_characters(
     admin_user: AdminUser = Depends(require_content_management),
     request: Request = None,
-    universe: Optional[str] = Query(None, pattern="^(marvel|dc|image)$")
+    universe: Optional[str] = Query(None, pattern="^(marvel|DC|image)$")
 ):
     """Get canonical characters, optionally filtered by universe"""
     try:
@@ -447,7 +447,7 @@ async def get_canonical_characters(
         else:
             # Get all characters from all universes
             all_characters = []
-            for univ in ["marvel", "dc", "image"]:
+            for univ in ["marvel", "DC", "image"]:
                 chars = await governance_service.get_canonical_characters_by_universe(univ)
                 all_characters.extend(chars)
             characters = all_characters
@@ -740,7 +740,7 @@ async def generate_governance_report(
     admin_user: AdminUser = Depends(require_view_system_stats),
     request: Request = None,
     report_type: str = Query("duplicate_analysis", pattern="^(duplicate_analysis|alias_coverage|content_review_status)$"),
-    universe: Optional[str] = Query(None, pattern="^(marvel|dc|image)$")
+    universe: Optional[str] = Query(None, pattern="^(marvel|DC|image)$")
 ):
     """Generate a content governance report"""
     try:

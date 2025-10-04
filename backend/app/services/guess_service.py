@@ -22,7 +22,7 @@ class GuessValidationService:
         self.user_repository = UserRepository()
         self.puzzle_service = PuzzleService()
         self.max_attempts = 6
-        self.universes = ["marvel", "dc", "image"]
+        self.universes = ["marvel", "DC", "image"]
     
     def normalize_guess(self, guess: str) -> str:
         """Normalize a guess for comparison"""

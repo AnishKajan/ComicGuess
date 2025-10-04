@@ -71,7 +71,7 @@ class TestPuzzleValidator:
         """Test validation of valid image keys"""
         valid_keys = [
             "marvel/spider-man.jpg",
-            "dc/batman.png",
+            "DC/batman.png",
             "image/spawn.jpeg"
         ]
         
@@ -82,7 +82,7 @@ class TestPuzzleValidator:
     
     def test_validate_image_key_wrong_prefix(self, validator):
         """Test validation with wrong universe prefix"""
-        issues = validator.validate_image_key("dc/batman.jpg", "marvel")
+        issues = validator.validate_image_key("DC/batman.jpg", "marvel")
         error_issues = [issue for issue in issues if issue.severity == ValidationSeverity.ERROR]
         assert len(error_issues) >= 1
         assert any("must start with" in issue.message.lower() for issue in error_issues)
@@ -130,7 +130,7 @@ class TestPuzzleValidator:
     
     def test_validate_universe_valid(self, validator):
         """Test validation of valid universes"""
-        for universe in ["marvel", "dc", "image"]:
+        for universe in ["marvel", "DC", "image"]:
             issues = validator.validate_universe(universe)
             assert len(issues) == 0
     

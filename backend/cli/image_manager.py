@@ -36,7 +36,7 @@ class ImageManager:
         Upload a single character image.
         
         Args:
-            universe: Comic universe (marvel, dc, image)
+            universe: Comic universe (marvel, DC, image)
             character_name: Character name
             image_path: Path to image file
             optimize: Whether to optimize the image
@@ -122,7 +122,7 @@ class ImageManager:
         Character names are derived from filenames (without extension).
         
         Args:
-            universe: Comic universe (marvel, dc, image)
+            universe: Comic universe (marvel, DC, image)
             images_dir: Directory containing images
             optimize: Whether to optimize images
             overwrite: Whether to overwrite existing images
@@ -215,7 +215,7 @@ class ImageManager:
             'errors': []
         }
         
-        universes = [universe] if universe else ['marvel', 'dc', 'image']
+        universes = [universe] if universe else ['marvel', 'DC', 'image']
         
         for univ in universes:
             try:
@@ -397,7 +397,7 @@ async def main():
     
     # Upload single image command
     upload_parser = subparsers.add_parser('upload', help='Upload a single image')
-    upload_parser.add_argument('universe', choices=['marvel', 'dc', 'image'], help='Comic universe')
+    upload_parser.add_argument('universe', choices=['marvel', 'DC', 'image'], help='Comic universe')
     upload_parser.add_argument('character', help='Character name')
     upload_parser.add_argument('image', type=Path, help='Image file path')
     upload_parser.add_argument('--no-optimize', action='store_true', help='Skip image optimization')
@@ -405,7 +405,7 @@ async def main():
     
     # Bulk upload command
     bulk_parser = subparsers.add_parser('bulk-upload', help='Upload multiple images from directory')
-    bulk_parser.add_argument('universe', choices=['marvel', 'dc', 'image'], help='Comic universe')
+    bulk_parser.add_argument('universe', choices=['marvel', 'DC', 'image'], help='Comic universe')
     bulk_parser.add_argument('directory', type=Path, help='Directory containing images')
     bulk_parser.add_argument('--no-optimize', action='store_true', help='Skip image optimization')
     bulk_parser.add_argument('--overwrite', action='store_true', help='Overwrite existing images')
@@ -413,15 +413,15 @@ async def main():
     
     # List images command
     list_parser = subparsers.add_parser('list', help='List images in universe')
-    list_parser.add_argument('universe', choices=['marvel', 'dc', 'image'], help='Comic universe')
+    list_parser.add_argument('universe', choices=['marvel', 'DC', 'image'], help='Comic universe')
     
     # Validate images command
     validate_parser = subparsers.add_parser('validate', help='Validate images in storage')
-    validate_parser.add_argument('--universe', choices=['marvel', 'dc', 'image'], help='Validate specific universe')
+    validate_parser.add_argument('--universe', choices=['marvel', 'DC', 'image'], help='Validate specific universe')
     
     # Delete image command
     delete_parser = subparsers.add_parser('delete', help='Delete a character image')
-    delete_parser.add_argument('universe', choices=['marvel', 'dc', 'image'], help='Comic universe')
+    delete_parser.add_argument('universe', choices=['marvel', 'DC', 'image'], help='Comic universe')
     delete_parser.add_argument('character', help='Character name')
     delete_parser.add_argument('--confirm', action='store_true', help='Confirm deletion')
     

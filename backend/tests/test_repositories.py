@@ -29,8 +29,8 @@ class TestUserRepository:
             "username": "testuser",
             "email": "test@example.com",
             "created_at": datetime.utcnow().isoformat(),
-            "streaks": {"marvel": 5, "dc": 3, "image": 0},
-            "last_played": {"marvel": "2024-01-15", "dc": "2024-01-14", "image": None},
+            "streaks": {"marvel": 5, "DC": 3, "image": 0},
+            "last_played": {"marvel": "2024-01-15", "DC": "2024-01-14", "image": None},
             "total_games": 10,
             "total_wins": 8
         }
@@ -54,8 +54,8 @@ class TestUserRepository:
                 "username": "newuser",
                 "email": "new@example.com",
                 "created_at": datetime.utcnow().isoformat(),
-                "streaks": {"marvel": 0, "dc": 0, "image": 0},
-                "last_played": {"marvel": None, "dc": None, "image": None},
+                "streaks": {"marvel": 0, "DC": 0, "image": 0},
+                "last_played": {"marvel": None, "DC": None, "image": None},
                 "total_games": 0,
                 "total_wins": 0
             }

@@ -272,7 +272,7 @@ class AnalyticsService:
         
         current_date = export_request.date_range_start
         while current_date <= export_request.date_range_end:
-            for universe in ["marvel", "dc", "image"]:
+            for universe in ["marvel", "DC", "image"]:
                 # Get puzzle for this date and universe
                 puzzle = await self.puzzle_repo.get_daily_puzzle(universe, current_date.isoformat())
                 

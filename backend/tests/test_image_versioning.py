@@ -123,7 +123,7 @@ class TestImageVersioning:
             # Add some cached version data
             image_service._image_versions["marvel:Spider-Man"] = {"version": "abc12345"}
             image_service._image_versions["marvel:Iron-Man"] = {"version": "def67890"}
-            image_service._image_versions["dc:Batman"] = {"version": "ghi11111"}
+            image_service._image_versions["DC:Batman"] = {"version": "ghi11111"}
             
             result = await image_service.bulk_invalidate_universe_images("marvel")
             
@@ -134,7 +134,7 @@ class TestImageVersioning:
             # Marvel entries should be removed, DC entry should remain
             assert "marvel:Spider-Man" not in image_service._image_versions
             assert "marvel:Iron-Man" not in image_service._image_versions
-            assert "dc:Batman" in image_service._image_versions
+            assert "DC:Batman" in image_service._image_versions
     
     def test_get_versioned_cache_headers(self, image_service):
         """Test getting versioned cache headers"""

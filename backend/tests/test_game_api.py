@@ -18,8 +18,8 @@ def override_get_current_user():
         id="user123",
         username="testuser",
         email="test@example.com",
-        streaks={"marvel": 5, "dc": 2, "image": 0},
-        last_played={"marvel": "2024-01-14", "dc": "2024-01-13"},
+        streaks={"marvel": 5, "DC": 2, "image": 0},
+        last_played={"marvel": "2024-01-14", "DC": "2024-01-13"},
         total_games=10,
         total_wins=7
     )
@@ -37,8 +37,8 @@ class TestGameAPI:
             id="user123",
             username="testuser",
             email="test@example.com",
-            streaks={"marvel": 5, "dc": 2, "image": 0},
-            last_played={"marvel": "2024-01-14", "dc": "2024-01-13"},
+            streaks={"marvel": 5, "DC": 2, "image": 0},
+            last_played={"marvel": "2024-01-14", "DC": "2024-01-13"},
             total_games=10,
             total_wins=7
         )
@@ -293,9 +293,9 @@ class TestGameAPI:
                 "can_guess": False,
                 "guesses": ["Spider-Man"]
             },
-            "dc": {
+            "DC": {
                 "puzzle_available": True,
-                "puzzle_id": "20240115-dc",
+                "puzzle_id": "20240115-DC",
                 "is_solved": False,
                 "attempts_used": 2,
                 "attempts_remaining": 4,
@@ -321,21 +321,21 @@ class TestGameAPI:
                 assert data["user_id"] == "user123"
                 assert "universes" in data
                 assert data["universes"]["marvel"]["is_solved"] is True
-                assert data["universes"]["dc"]["is_solved"] is False
+                assert data["universes"]["DC"]["is_solved"] is False
     
     def test_get_streak_status(self, mock_auth):
         """Test getting streak status"""
         streak_stats = {
-            "current_streaks": {"marvel": 5, "dc": 2, "image": 0},
+            "current_streaks": {"marvel": 5, "DC": 2, "image": 0},
             "total_current_streak": 7,
             "best_universe": "marvel",
             "best_streak_value": 5,
-            "max_streaks": {"marvel": 5, "dc": 2, "image": 0}
+            "max_streaks": {"marvel": 5, "DC": 2, "image": 0}
         }
         
         maintenance_status = {
             "marvel": {"status": "completed", "message": "Puzzle solved - streak maintained"},
-            "dc": {"status": "pending", "message": "Puzzle not attempted - streak at risk"},
+            "DC": {"status": "pending", "message": "Puzzle not attempted - streak at risk"},
             "image": {"status": "no_puzzle", "message": "No puzzle available today"}
         }
         

@@ -191,7 +191,7 @@ def get_rights_holder_from_universe(universe: str) -> RightsHolder:
     """Get rights holder based on universe"""
     universe_mapping = {
         "marvel": RightsHolder.MARVEL,
-        "dc": RightsHolder.DC,
+        "DC": RightsHolder.DC,
         "image": RightsHolder.IMAGE
     }
     

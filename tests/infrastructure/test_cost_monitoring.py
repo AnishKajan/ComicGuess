@@ -97,7 +97,7 @@ class TestCostOptimizer:
         
         # Mock storage metrics
         mock_metric = Mock()
-        mock_metric.name.value = 'UsedCapacity'
+        mock_metric.name.value = 'UseDCapacity'
         mock_timeseries = Mock()
         
         # Simulate storage capacity data (100GB average)

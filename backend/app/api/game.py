@@ -31,7 +31,7 @@ guess_service = GuessValidationService()
 class GuessRequest(BaseModel):
     """Request model for submitting a guess"""
     user_id: str = Field(..., description="ID of the user making the guess")
-    universe: str = Field(..., description="Comic universe (marvel, dc, image)")
+    universe: str = Field(..., description="Comic universe (marvel, DC, image)")
     guess: str = Field(..., min_length=1, max_length=100, description="Character name guess")
 
 class PuzzleStatusResponse(BaseModel):
@@ -56,7 +56,7 @@ async def submit_guess(
     Submit a character name guess for today's puzzle
     
     - **user_id**: ID of the user making the guess
-    - **universe**: Comic universe (marvel, dc, or image)
+    - **universe**: Comic universe (marvel, DC, or image)
     - **guess**: Character name guess
     
     Returns guess result with correctness, streak, and game status
@@ -129,13 +129,13 @@ async def submit_guess(
 @router.get("/puzzle/today", response_model=PuzzleResponse)
 async def get_today_puzzle(
     response: Response,
-    universe: str = Query(..., description="Comic universe (marvel, dc, image)"),
+    universe: str = Query(..., description="Comic universe (marvel, DC, image)"),
     current_user: dict = Depends(get_current_user)
 ) -> PuzzleResponse:
     """
     Get today's puzzle for a specific universe
     
-    - **universe**: Comic universe (marvel, dc, or image)
+    - **universe**: Comic universe (marvel, DC, or image)
     
     Returns puzzle information without revealing the answer
     """
@@ -191,7 +191,7 @@ async def get_puzzle_status(
             )
         
         universe = puzzle_id.split('-')[1]
-        if universe not in ["marvel", "dc", "image"]:
+        if universe not in ["marvel", "DC", "image"]:
             raise HTTPException(
                 status_code=400,
                 detail="Invalid universe in puzzle ID"
@@ -339,17 +339,17 @@ async def simulate_guess(
     Simulate a guess without recording it (for testing/preview)
     
     - **user_id**: ID of the user making the guess
-    - **universe**: Comic universe (marvel, dc, image)
+    - **universe**: Comic universe (marvel, DC, image)
     - **guess**: Character name guess
     
     Returns what the outcome would be without actually recording the guess
     """
     try:
         # Validate universe
-        if guess_request.universe not in ["marvel", "dc", "image"]:
+        if guess_request.universe not in ["marvel", "DC", "image"]:
             raise HTTPException(
                 status_code=400,
-                detail="Universe must be one of: marvel, dc, image"
+                detail="Universe must be one of: marvel, DC, image"
             )
         
         # Get today's puzzle ID

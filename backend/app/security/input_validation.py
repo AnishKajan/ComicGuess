@@ -18,8 +18,8 @@ class InputSanitizer:
         "username": re.compile(r"^[a-zA-Z0-9_-]{3,30}$"),
         "email": re.compile(r"^[a-zA-Z0-9][a-zA-Z0-9._%+-]*[a-zA-Z0-9]@[a-zA-Z0-9][a-zA-Z0-9.-]*[a-zA-Z0-9]\.[a-zA-Z]{2,}$|^[a-zA-Z0-9]@[a-zA-Z0-9][a-zA-Z0-9.-]*[a-zA-Z0-9]\.[a-zA-Z]{2,}$"),
         "character_name": re.compile(r"^[a-zA-Z0-9\s\-'\.()]{1,100}$"),
-        "universe": re.compile(r"^(marvel|dc|image)$"),
-        "puzzle_id": re.compile(r"^\d{8}-(marvel|dc|image)$"),
+        "universe": re.compile(r"^(marvel|DC|image)$"),
+        "puzzle_id": re.compile(r"^\d{8}-(marvel|DC|image)$"),
         "user_id": re.compile(r"^[a-zA-Z0-9_-]{1,50}$"),
         "alphanumeric": re.compile(r"^[a-zA-Z0-9]+$"),
         "safe_string": re.compile(r"^[a-zA-Z0-9\s\-_.,!?()]{0,500}$")
@@ -135,7 +135,7 @@ class InputSanitizer:
         universe = cls.sanitize_string(universe, max_length=10).lower()
         
         if not cls.PATTERNS["universe"].match(universe):
-            raise ValueError("Universe must be one of: marvel, dc, image")
+            raise ValueError("Universe must be one of: marvel, DC, image")
         
         return universe
     

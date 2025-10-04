@@ -54,10 +54,10 @@ class TestAdminUtils:
                     'active_date': '2024-01-15'
                 },
                 {
-                    'universe': 'dc',
+                    'universe': 'DC',
                     'character': 'Batman',
                     'character_aliases': ['Dark Knight'],
-                    'image_key': 'dc/batman.jpg',
+                    'image_key': 'DC/batman.jpg',
                     'active_date': '2024-01-16'
                 }
             ],
@@ -429,7 +429,7 @@ class TestAdminUtils:
         # Verify healthy integrity
         assert integrity['status'] == 'healthy'
         assert integrity['checks']['marvel_puzzles_exist'] is True
-        assert integrity['checks']['dc_puzzles_exist'] is True
+        assert integrity['checks']['DC_puzzles_exist'] is True
         assert integrity['checks']['image_puzzles_exist'] is True
         assert integrity['checks']['future_puzzles_available'] is True
     

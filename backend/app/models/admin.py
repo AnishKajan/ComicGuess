@@ -160,7 +160,7 @@ class SystemStats(BaseModel):
 class PuzzleSchedule(BaseModel):
     """Puzzle scheduling model"""
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    universe: str = Field(..., pattern="^(marvel|dc|image)$")
+    universe: str = Field(..., pattern="^(marvel|DC|image)$")
     character: str = Field(...)
     character_aliases: List[str] = Field(default_factory=list)
     image_key: str = Field(...)

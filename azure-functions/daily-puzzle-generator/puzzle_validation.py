@@ -42,7 +42,7 @@ class PuzzleValidator:
     """Validates puzzle data integrity and business rules"""
     
     def __init__(self):
-        self.universes = ["marvel", "dc", "image"]
+        self.universes = ["marvel", "DC", "image"]
         self.required_character_fields = ["character", "aliases", "image_key"]
         self.image_extensions = [".jpg", ".jpeg", ".png", ".webp"]
     
@@ -293,10 +293,10 @@ class PuzzleErrorHandler:
                 "aliases": ["Spidey", "Peter Parker"],
                 "image_key": "marvel/spider-man.jpg"
             },
-            "dc": {
+            "DC": {
                 "character": "Batman", 
                 "aliases": ["Bruce Wayne", "Dark Knight"],
-                "image_key": "dc/batman.jpg"
+                "image_key": "DC/batman.jpg"
             },
             "image": {
                 "character": "Spawn",

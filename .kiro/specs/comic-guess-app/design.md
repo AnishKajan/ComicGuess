@@ -100,7 +100,7 @@ POST /guess
 # Body: { "userId": str, "universe": str, "guess": str }
 # Response: { "correct": bool, "character": str?, "imageUrl": str?, "streak": int }
 
-GET /puzzle/today?universe={marvel|dc|image}
+GET /puzzle/today?universe={marvel|DC|image}
 # Response: { "puzzleId": str, "universe": str, "hints": list?, "date": str }
 ```
 
@@ -126,8 +126,8 @@ class User(BaseModel):
     username: str
     email: str
     created_at: datetime
-    streaks: Dict[str, int]  # {"marvel": 5, "dc": 2, "image": 0}
-    last_played: Dict[str, str]  # {"marvel": "2024-01-15", "dc": "2024-01-14"}
+    streaks: Dict[str, int]  # {"marvel": 5, "DC": 2, "image": 0}
+    last_played: Dict[str, str]  # {"marvel": "2024-01-15", "DC": "2024-01-14"}
     total_games: int
     total_wins: int
 ```
@@ -136,7 +136,7 @@ class User(BaseModel):
 ```python
 class Puzzle(BaseModel):
     id: str  # Format: "YYYYMMDD-universe"
-    universe: str  # "marvel" | "dc" | "image"
+    universe: str  # "marvel" | "DC" | "image"
     character: str
     character_aliases: List[str]  # Alternative names/spellings
     image_key: str  # Blob storage path

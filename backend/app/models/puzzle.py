@@ -7,7 +7,7 @@ class Puzzle(BaseModel):
     """Puzzle model for daily comic character puzzles"""
     
     id: str = Field(..., description="Puzzle ID in format YYYYMMDD-universe")
-    universe: str = Field(..., description="Comic universe: marvel, dc, or image")
+    universe: str = Field(..., description="Comic universe: marvel, DC, or image")
     character: str = Field(..., min_length=1, max_length=100, description="Character name (correct answer)")
     character_aliases: List[str] = Field(default_factory=list, description="Alternative names/spellings for the character")
     image_key: str = Field(..., description="Azure Blob Storage path for character image")
@@ -18,7 +18,7 @@ class Puzzle(BaseModel):
     @classmethod
     def validate_universe(cls, v):
         """Validate universe is one of the allowed values"""
-        allowed_universes = {"marvel", "dc", "image"}
+        allowed_universes = {"marvel", "DC", "image"}
         if v.lower() not in allowed_universes:
             raise ValueError(f'Universe must be one of: {allowed_universes}')
         return v.lower()
@@ -27,7 +27,7 @@ class Puzzle(BaseModel):
     @classmethod
     def validate_puzzle_id(cls, v):
         """Validate puzzle ID format: YYYYMMDD-universe"""
-        pattern = r'^\d{8}-(marvel|dc|image)$'
+        pattern = r'^\d{8}-(marvel|DC|image)$'
         if not re.match(pattern, v):
             raise ValueError('Puzzle ID must be in format YYYYMMDD-universe (e.g., 20240115-marvel)')
         
@@ -117,7 +117,7 @@ class PuzzleCreate(BaseModel):
     @field_validator('universe')
     @classmethod
     def validate_universe(cls, v):
-        allowed_universes = {"marvel", "dc", "image"}
+        allowed_universes = {"marvel", "DC", "image"}
         if v.lower() not in allowed_universes:
             raise ValueError(f'Universe must be one of: {allowed_universes}')
         return v.lower()

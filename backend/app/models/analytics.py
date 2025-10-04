@@ -214,7 +214,7 @@ class OperationalReport(BaseModel):
 class UserActivitySummary(BaseModel):
     """User activity summary for analytics"""
     date: date = Field(...)
-    universe: str = Field(..., pattern="^(marvel|dc|image|all)$")
+    universe: str = Field(..., pattern="^(marvel|DC|image|all)$")
     
     # User metrics
     total_users: int = Field(default=0)

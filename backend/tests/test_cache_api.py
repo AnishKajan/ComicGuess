@@ -204,7 +204,7 @@ class TestCacheStatusEndpoints:
         assert response.status_code == 200
         data = response.json()
         assert data["success"] is True
-        assert len(data["universes"]) == 3  # marvel, dc, image
+        assert len(data["universes"]) == 3  # marvel, DC, image
     
     def test_warm_cache_invalid_universe(self, client, mock_current_user):
         """Test cache warming with invalid universe"""

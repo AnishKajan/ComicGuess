@@ -44,7 +44,7 @@ logger = logging.getLogger(__name__)
 class ImageProcessingJob:
     """Image processing job configuration."""
     source_path: str
-    universe: str  # marvel, dc, image
+    universe: str  # marvel, DC, image
     character_name: str
     is_primary: bool = True
     metadata: Dict[str, Any] = None
