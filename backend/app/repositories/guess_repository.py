@@ -251,6 +251,22 @@ class GuessRepository(BaseRepository[Guess]):
         logger.info(f"Deleted {deleted_count} guesses for user {user_id}")
         return deleted_count
     
+    async def delete_by_user_id(self, user_id: str) -> int:
+        """Delete all guesses for a user by user ID (alias for delete_user_guesses)"""
+        return await self.delete_user_guesses(user_id)
+    
+    async def get_by_user_id(self, user_id: str) -> List[Guess]:
+        """Get all guesses for a user (alias for get_user_recent_guesses with no limit)"""
+        query = """
+        SELECT * FROM c 
+        WHERE c.user_id = @user_id 
+        ORDER BY c.timestamp DESC
+        """
+        parameters = [{"name": "@user_id", "value": user_id}]
+        
+        results = await self.query(query, parameters, partition_key=user_id)
+        return [Guess(**result) for result in results]
+    
     async def cleanup_old_guesses(self, days_to_keep: int = 365) -> int:
         """Clean up guesses older than specified days"""
         cutoff_datetime = datetime.utcnow() - timedelta(days=days_to_keep)

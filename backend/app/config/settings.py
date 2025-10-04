@@ -38,6 +38,7 @@ class Settings(BaseSettings):
     cosmos_container_users: str = "users"
     cosmos_container_puzzles: str = "puzzles"
     cosmos_container_guesses: str = "guesses"
+    cosmos_container_governance: str = "governance"
     
     # Storage Configuration (Azure Blob Storage)
     azure_storage_account_name: str = "devstorageaccount1"

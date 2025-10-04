@@ -281,3 +281,23 @@ class PuzzleService:
                 integrity_report["issues"].append(f"Missing today's puzzle for {universe}")
         
         return integrity_report
+    
+    async def hotfix_puzzle(self, puzzle_id: str, replacement_character: str, 
+                          replacement_aliases: Optional[List[str]] = None) -> Puzzle:
+        """Apply emergency hotfix to a puzzle by replacing the character"""
+        puzzle = await self.puzzle_repository.get_puzzle_by_id(puzzle_id)
+        if not puzzle:
+            raise ItemNotFoundError(f"Puzzle with id {puzzle_id} not found")
+        
+        # Prepare update data
+        updates = {
+            "character": replacement_character,
+            "character_aliases": replacement_aliases or []
+        }
+        
+        # Update the puzzle
+        updated_puzzle = await self.puzzle_repository.update_puzzle(puzzle_id, updates)
+        
+        logger.warning(f"HOTFIX APPLIED: Puzzle {puzzle_id} character changed from '{puzzle.character}' to '{replacement_character}'")
+        
+        return updated_puzzle

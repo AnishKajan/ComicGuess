@@ -253,3 +253,36 @@ class PuzzleRepository(BaseRepository[Puzzle]):
         
         logger.info(f"Cleaned up {deleted_count} old puzzles")
         return deleted_count
+    
+    async def get_puzzle_count(self) -> int:
+        """Get total number of puzzles across all universes"""
+        query = "SELECT VALUE COUNT(1) FROM c"
+        results = await self.query(query)
+        return results[0] if results else 0
+    
+    async def get_puzzle_count_by_universe(self, universe: str) -> int:
+        """Get total number of puzzles for a specific universe"""
+        query = "SELECT VALUE COUNT(1) FROM c WHERE c.universe = @universe"
+        parameters = [{"name": "@universe", "value": universe}]
+        results = await self.query(query, parameters, partition_key=universe)
+        return results[0] if results else 0
+    
+    async def get_puzzles_paginated(self, universe: Optional[str] = None, limit: int = 50, offset: int = 0) -> List[Puzzle]:
+        """Get puzzles with pagination, optionally filtered by universe"""
+        if universe:
+            query = "SELECT * FROM c WHERE c.universe = @universe ORDER BY c.active_date DESC OFFSET @offset LIMIT @limit"
+            parameters = [
+                {"name": "@universe", "value": universe},
+                {"name": "@offset", "value": offset},
+                {"name": "@limit", "value": limit}
+            ]
+            results = await self.query(query, parameters, partition_key=universe)
+        else:
+            query = "SELECT * FROM c ORDER BY c.active_date DESC OFFSET @offset LIMIT @limit"
+            parameters = [
+                {"name": "@offset", "value": offset},
+                {"name": "@limit", "value": limit}
+            ]
+            results = await self.query(query, parameters)
+        
+        return [Puzzle(**result) for result in results]

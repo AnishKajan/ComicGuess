@@ -446,8 +446,8 @@
   - Write tests for image optimization quality and performance
   - _Requirements: 5.2, 5.4, 6.4_
 
-- [-] 23. Admin & content operations
-- [-] 23.1 Create administrative interface
+- [x] 23. Admin & content operations
+- [x] 23.1 Create administrative interface
 
   - Build minimal admin UI with RBAC for puzzle scheduling and hotfixes
   - Implement secure administrative access and audit logging
@@ -455,7 +455,7 @@
   - Write tests for admin functionality and access control
   - _Requirements: 7.1, 7.2, 7.4_
 
-- [ ] 23.2 Implement content governance and management
+- [x] 23.2 Implement content governance and management
 
   - Create duplicate and alias governance with canonical name lists
   - Implement locale-aware character name matching and validation
@@ -463,7 +463,7 @@
   - Write tests for content governance and validation rules
   - _Requirements: 7.6, 2.1_
 
-- [ ] 23.3 Add operational audit and analytics
+- [x] 23.3 Add operational audit and analytics
 
   - Implement audit logging for all administrative actions
   - Create data export capabilities for statistical analysis
@@ -471,8 +471,8 @@
   - Write tests for audit logging completeness and data export functionality
   - _Requirements: 3.6, 7.4_
 
-- [ ] 24. Product & policy compliance
-- [ ] 24.1 Create legal and policy pages
+- [x] 24. Product & policy compliance
+- [x] 24.1 Create legal and policy pages
 
   - Implement Terms of Service and Privacy Policy pages
   - Add COPPA compliance considerations for minor users
@@ -480,7 +480,7 @@
   - Write tests for policy page accessibility and legal compliance
   - _Requirements: 6.5, 3.6_
 
-- [ ] 24.2 Address intellectual property and licensing
+- [x] 24.2 Address intellectual property and licensing
   - Conduct trademark and IP review for character names and images
   - Document licensing posture and usage rights for comic character content
   - Implement content attribution and licensing compliance

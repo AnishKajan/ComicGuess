@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ComicGuess Admin Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-left: 4px solid #667eea;
+        }
+        
+        .stat-card h3 {
+            font-size: 0.875rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #333;
+        }
+        
+        .actions-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .actions-section h2 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5a6fd8;
+        }
+        
+        .btn-warning {
+            background: #f59e0b;
+            color: white;
+        }
+        
+        .btn-warning:hover {
+            background: #d97706;
+        }
+        
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+        
+        .recent-activity {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .recent-activity h2 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        
+        .activity-list {
+            list-style: none;
+        }
+        
+        .activity-item {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e5e5e5;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+        
+        .activity-description {
+            flex: 1;
+        }
+        
+        .activity-time {
+            color: #666;
+            font-size: 0.875rem;
+        }
+        
+        .hotfix-form {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+        
+        .hotfix-form h3 {
+            color: #92400e;
+            margin-bottom: 1rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .alert {
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+        }
+        
+        .alert-success {
+            background: #d1fae5;
+            border: 1px solid #10b981;
+            color: #065f46;
+        }
+        
+        .alert-error {
+            background: #fee2e2;
+            border: 1px solid #ef4444;
+            color: #991b1b;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ComicGuess Admin Dashboard</h1>
+    </div>
+    
+    <div class="container">
+        <!-- System Statistics -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Users</h3>
+                <div class="value" id="total-users">-</div>
+            </div>
+            <div class="stat-card">
+                <h3>Active Today</h3>
+                <div class="value" id="active-today">-</div>
+            </div>
+            <div class="stat-card">
+                <h3>Total Puzzles</h3>
+                <div class="value" id="total-puzzles">-</div>
+            </div>
+            <div class="stat-card">
+                <h3>Success Rate</h3>
+                <div class="value" id="success-rate">-</div>
+            </div>
+        </div>
+        
+        <!-- Quick Actions -->
+        <div class="actions-section">
+            <h2>Quick Actions</h2>
+            <div class="action-buttons">
+                <a href="#" class="btn btn-primary" onclick="viewUsers()">View Users</a>
+                <a href="#" class="btn btn-primary" onclick="viewPuzzles()">View Puzzles</a>
+                <a href="#" class="btn btn-primary" onclick="viewAuditLogs()">Audit Logs</a>
+                <a href="#" class="btn btn-warning" onclick="showHotfixForm()">Emergency Hotfix</a>
+                <a href="#" class="btn btn-primary" onclick="checkSystemHealth()">System Health</a>
+            </div>
+            
+            <!-- Emergency Hotfix Form -->
+            <div class="hotfix-form" id="hotfix-form" style="display: none;">
+                <h3>⚠️ Emergency Puzzle Hotfix</h3>
+                <p>Use this only for urgent fixes to today's puzzle. This action is logged and audited.</p>
+                <div class="form-group">
+                    <label for="puzzle-id">Puzzle ID (YYYYMMDD-universe):</label>
+                    <input type="text" id="puzzle-id" placeholder="e.g., 20240115-marvel">
+                </div>
+                <div class="form-group">
+                    <label for="replacement-character">Replacement Character:</label>
+                    <input type="text" id="replacement-character" placeholder="e.g., Spider-Man">
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-danger" onclick="applyHotfix()">Apply Hotfix</button>
+                    <button class="btn" onclick="hideHotfixForm()">Cancel</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recent Activity -->
+        <div class="recent-activity">
+            <h2>Recent Admin Activity</h2>
+            <ul class="activity-list" id="activity-list">
+                <li class="activity-item">
+                    <div class="activity-description">Loading recent activity...</div>
+                    <div class="activity-time">-</div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+    <script>
+        // API base URL - adjust as needed
+        const API_BASE = '/admin';
+        
+        // Get auth token from localStorage or prompt user
+        function getAuthToken() {
+            return localStorage.getItem('admin_token') || prompt('Enter admin token:');
+        }
+        
+        // Make authenticated API request
+        async function apiRequest(endpoint, options = {}) {
+            const token = getAuthToken();
+            if (!token) {
+                alert('Authentication required');
+                return null;
+            }
+            
+            const response = await fetch(API_BASE + endpoint, {
+                ...options,
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                    ...options.headers
+                }
+            });
+            
+            if (!response.ok) {
+                if (response.status === 401 || response.status === 403) {
+                    alert('Authentication failed or insufficient permissions');
+                    localStorage.removeItem('admin_token');
+                    return null;
+                }
+                throw new Error(`API request failed: ${response.statusText}`);
+            }
+            
+            return response.json();
+        }
+        
+        // Load dashboard data
+        async function loadDashboard() {
+            try {
+                const data = await apiRequest('/dashboard');
+                if (!data) return;
+                
+                // Update statistics
+                document.getElementById('total-users').textContent = data.stats.total_users.toLocaleString();
+                document.getElementById('active-today').textContent = data.stats.active_users_today.toLocaleString();
+                document.getElementById('total-puzzles').textContent = data.stats.total_puzzles.toLocaleString();
+                document.getElementById('success-rate').textContent = (data.stats.success_rate_today * 100).toFixed(1) + '%';
+                
+                // Update recent activity
+                const activityList = document.getElementById('activity-list');
+                activityList.innerHTML = '';
+                
+                data.recent_audit_logs.forEach(log => {
+                    const li = document.createElement('li');
+                    li.className = 'activity-item';
+                    li.innerHTML = `
+                        <div class="activity-description">
+                            <strong>${log.admin_username}</strong> ${log.action} ${log.resource_type}
+                            ${log.resource_id ? `(${log.resource_id})` : ''}
+                        </div>
+                        <div class="activity-time">${new Date(log.timestamp).toLocaleString()}</div>
+                    `;
+                    activityList.appendChild(li);
+                });
+                
+                if (data.recent_audit_logs.length === 0) {
+                    activityList.innerHTML = '<li class="activity-item"><div class="activity-description">No recent activity</div></li>';
+                }
+                
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+                showAlert('Error loading dashboard data', 'error');
+            }
+        }
+        
+        // Show alert message
+        function showAlert(message, type = 'success') {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.textContent = message;
+            
+            const container = document.querySelector('.container');
+            container.insertBefore(alertDiv, container.firstChild);
+            
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 5000);
+        }
+        
+        // Quick action functions
+        function viewUsers() {
+            window.open('/admin/users', '_blank');
+        }
+        
+        function viewPuzzles() {
+            window.open('/admin/puzzles', '_blank');
+        }
+        
+        function viewAuditLogs() {
+            window.open('/admin/audit-logs', '_blank');
+        }
+        
+        function showHotfixForm() {
+            document.getElementById('hotfix-form').style.display = 'block';
+            // Pre-fill today's date
+            const today = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+            document.getElementById('puzzle-id').value = today + '-';
+        }
+        
+        function hideHotfixForm() {
+            document.getElementById('hotfix-form').style.display = 'none';
+            document.getElementById('puzzle-id').value = '';
+            document.getElementById('replacement-character').value = '';
+        }
+        
+        async function applyHotfix() {
+            const puzzleId = document.getElementById('puzzle-id').value.trim();
+            const replacementCharacter = document.getElementById('replacement-character').value.trim();
+            
+            if (!puzzleId || !replacementCharacter) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            if (!confirm(`Are you sure you want to apply a hotfix to puzzle ${puzzleId}? This action cannot be undone.`)) {
+                return;
+            }
+            
+            try {
+                const result = await apiRequest('/puzzles/hotfix', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        puzzle_id: puzzleId,
+                        replacement_character: replacementCharacter
+                    })
+                });
+                
+                if (result && result.success) {
+                    showAlert(`Hotfix applied successfully: ${result.message}`, 'success');
+                    hideHotfixForm();
+                    loadDashboard(); // Refresh dashboard
+                } else {
+                    showAlert('Hotfix failed', 'error');
+                }
+                
+            } catch (error) {
+                console.error('Error applying hotfix:', error);
+                showAlert('Error applying hotfix: ' + error.message, 'error');
+            }
+        }
+        
+        async function checkSystemHealth() {
+            try {
+                const health = await apiRequest('/system/health');
+                if (health) {
+                    const healthStatus = Object.entries(health)
+                        .filter(([key]) => !['last_check', 'uptime', 'response_time_avg'].includes(key))
+                        .map(([service, status]) => `${service}: ${status}`)
+                        .join('\n');
+                    
+                    alert(`System Health Status:\n\n${healthStatus}\n\nUptime: ${health.uptime}\nAvg Response: ${health.response_time_avg}`);
+                }
+            } catch (error) {
+                console.error('Error checking system health:', error);
+                showAlert('Error checking system health: ' + error.message, 'error');
+            }
+        }
+        
+        // Load dashboard on page load
+        document.addEventListener('DOMContentLoaded', loadDashboard);
+        
+        // Refresh dashboard every 5 minutes
+        setInterval(loadDashboard, 5 * 60 * 1000);
+    </script>
+</body>
+</html>

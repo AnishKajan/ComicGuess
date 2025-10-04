@@ -158,6 +158,21 @@ class UserRepository(BaseRepository[User]):
         results = await self.query(query)
         return results[0] if results else 0
     
+    async def get_user_count(self) -> int:
+        """Alias for get_users_count for consistency"""
+        return await self.get_users_count()
+    
+    async def get_users_paginated(self, limit: int = 50, offset: int = 0) -> List[User]:
+        """Get users with pagination"""
+        query = "SELECT * FROM c ORDER BY c.created_at DESC OFFSET @offset LIMIT @limit"
+        parameters = [
+            {"name": "@offset", "value": offset},
+            {"name": "@limit", "value": limit}
+        ]
+        
+        results = await self.query(query, parameters)
+        return [User(**result) for result in results]
+    
     async def cleanup_inactive_users(self, days_inactive: int = 365) -> int:
         """Clean up users who haven't played in specified days"""
         cutoff_date = datetime.utcnow().strftime('%Y-%m-%d')
