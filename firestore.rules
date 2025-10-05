@@ -1,9 +1,47 @@
-// Only authenticated users can read/write (tighten later per collections)
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    // Public read access to puzzles collection
+    // Only Cloud Functions can write to puzzles
+    match /puzzles/{puzzleId} {
+      allow read: if true;
+      allow write: if false; // Only server-side functions can write
+    }
+    
+    // Public read access to characters collection
+    // Characters should be managed server-side only
+    match /characters/{characterId} {
+      allow read: if true;
+      allow write: if false; // Only server-side functions or admin can write
+    }
+    
+    // User documents - users can read/write their own data
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Guess documents - users can only create their own guesses
+    // Structure: guesses/{uid}/days/{datePublisher}/items/{autoId}
+    match /guesses/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+      
+      match /days/{datePublisher} {
+        allow read: if request.auth != null && request.auth.uid == userId;
+        
+        match /items/{guessId} {
+          // Users can create guess documents but not update/delete them
+          allow create: if request.auth != null && 
+                       request.auth.uid == userId &&
+                       request.resource.data.uid == userId;
+          allow read: if request.auth != null && request.auth.uid == userId;
+          allow update, delete: if false; // Guesses are immutable once created
+        }
+      }
+    }
+    
+    // Deny all other access
     match /{document=**} {
-      allow read, write: if request.auth != null;
+      allow read, write: if false;
     }
   }
 }

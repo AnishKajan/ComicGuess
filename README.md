@@ -6,8 +6,9 @@ A daily Wordle-style puzzle web application where users guess comic book charact
 
 ```
 ComicGuess/
-├── frontend/          # Next.js 14 frontend application
-├── backend/           # FastAPI backend application
+├── frontend/          # Next.js 15 frontend application
+├── functions/         # Firebase Cloud Functions (TypeScript)
+├── backend/           # Legacy FastAPI backend (deprecated)
 ├── .kiro/            # Kiro specifications and configuration
 └── README.md         # This file
 ```
@@ -19,60 +20,81 @@ ComicGuess/
 - Streak tracking and statistics
 - Responsive mobile-first design
 - Character image reveals on successful guesses
+- Firebase Authentication integration
+- Serverless architecture with Cloud Functions
 
 ## Tech Stack
 
 ### Frontend
-- **Next.js 14** with App Router
+- **Next.js 15** with App Router
 - **TypeScript** for type safety
 - **Tailwind CSS** for styling
 - **React** for UI components
+- **Firebase SDK** for auth and data
 
-### Backend
-- **FastAPI** for high-performance API
-- **Python 3.11+** with async/await
-- **Pydantic** for data validation
-- **JWT** for authentication
-
-### Infrastructure
+### Backend (Firebase-only)
+- **Firebase Cloud Functions** for serverless API
 - **Firebase Firestore** for data storage
 - **Firebase Storage** for character images
-- **Cloudflare CDN** for content delivery
-- **Scheduled tasks** for daily puzzle automation
+- **Firebase Authentication** for user management
+- **Cloud Scheduler** for daily puzzle rotation
+
+### Infrastructure
+- **Firebase Hosting** for static site hosting
+- **Firebase Security Rules** for data protection
+- **Scheduled Cloud Functions** for automation
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js 18+ and npm
-- Python 3.11+
-- Firebase project (for cloud services)
+- Node.js 20+ and npm
+- Firebase CLI (`npm install -g firebase-tools`)
+- Firebase project with Blaze plan (for Cloud Functions)
+
+### Firebase Setup
+
+1. **Initialize Firebase project:**
+   ```bash
+   firebase login
+   firebase use --add  # Select your Firebase project
+   ```
+
+2. **Enable required services:**
+   - Firestore Database
+   - Firebase Authentication
+   - Firebase Storage
+   - Cloud Functions
+   - Firebase Hosting
 
 ### Frontend Setup
 
 ```bash
 cd frontend
 npm install
-cp .env.local.example .env.local
-# Edit .env.local with your configuration
+# Environment variables are already configured in .env.local
 npm run dev
 ```
 
 The frontend will be available at `http://localhost:3000`
 
-### Backend Setup
+### Functions Setup
 
 ```bash
-cd backend
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-pip install -r requirements.txt
-cp .env.example .env
-# Edit .env with your configuration
-python main.py
+cd functions
+npm install
+npm run build
 ```
 
-The backend API will be available at `http://localhost:8000`
+### Local Development with Emulators
+
+```bash
+# Start Firebase emulators (run from project root)
+firebase emulators:start
+
+# In another terminal, start frontend
+cd frontend && npm run dev
+```
 
 ## Development
 
@@ -82,34 +104,89 @@ The backend API will be available at `http://localhost:8000`
 - `npm run lint` - Run ESLint
 - `npm run type-check` - Run TypeScript checks
 
-### Backend Development
-- `python main.py` - Start development server
-- `pytest` - Run tests
-- `pytest --cov` - Run tests with coverage
+### Functions Development
+- `npm run build` - Compile TypeScript
+- `npm run build:watch` - Watch mode compilation
+- `firebase emulators:start --only functions` - Test functions locally
 
-## API Documentation
+## Daily Puzzle Rotation
 
-Once the backend is running, visit `http://localhost:8000/docs` for interactive API documentation.
+The daily puzzles are automatically rotated by a Cloud Function (`rotateDailyPuzzle`) that:
+
+1. **Runs daily at midnight EST/EDT** using Cloud Scheduler
+2. **Deterministically selects characters** for each publisher using a date-based hash
+3. **Creates puzzle documents** in Firestore at `puzzles/{yyyy-mm-dd}-{publisher}`
+4. **Ensures consistent puzzles** - the same date always produces the same character
+
+### Switching to Curated Puzzles
+
+To use pre-selected characters instead of deterministic selection:
+
+1. Create a `curatedPuzzles` collection in Firestore
+2. Add documents with date keys and character IDs
+3. Update the `rotateDailyPuzzle` function to query this collection
+4. See comments in `functions/src/index.ts` for implementation details
 
 ## Environment Variables
 
 ### Frontend (.env.local)
-- `NEXT_PUBLIC_API_URL` - Backend API URL
-- `NEXT_PUBLIC_JWT_SECRET` - JWT secret for client-side validation
+The Firebase configuration is already set up in `frontend/.env.local`:
+- `NEXT_PUBLIC_FIREBASE_API_KEY` - Firebase web API key
+- `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN` - Firebase auth domain
+- `NEXT_PUBLIC_FIREBASE_PROJECT_ID` - Firebase project ID
+- `NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET` - Firebase storage bucket
+- `NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID` - Firebase messaging sender ID
+- `NEXT_PUBLIC_FIREBASE_APP_ID` - Firebase app ID
+- `NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID` - Firebase analytics measurement ID
 
-### Backend (.env)
-- `FIREBASE_PROJECT_ID` - Firebase project ID
-- `FIREBASE_PRIVATE_KEY` - Firebase service account private key
-- `FIREBASE_CLIENT_EMAIL` - Firebase service account email
-- `JWT_SECRET_KEY` - JWT signing secret
+## Deployment
 
-## Deploy (manual)
-
+### Deploy Functions
 ```bash
+# Build and deploy Cloud Functions
+cd functions
+npm run build
+firebase deploy --only functions
+```
+
+### Deploy Frontend
+```bash
+# Build and deploy to Firebase Hosting
 cd frontend
-npm ci
 npm run build:static
-npx firebase deploy --only hosting --project comicguess
+firebase deploy --only hosting
+```
+
+### Deploy Everything
+```bash
+# Deploy all Firebase services
+firebase deploy
+```
+
+## Data Seeding
+
+### Seed Character Data
+
+1. **Prepare character data** in `functions/src/seedCharacters.ts`
+2. **Run the seeding script:**
+   ```bash
+   cd functions
+   npm run build
+   node lib/seedCharacters.js
+   ```
+
+### Character Data Structure
+
+Characters should be stored in Firestore with this structure:
+```typescript
+{
+  id: string;           // Unique character ID
+  name: string;         // Character display name
+  publisher: "marvel" | "dc" | "image";
+  realName?: string;    // Character's real name
+  imageUrl?: string;    // Path to character image
+  description?: string; // Character description
+}
 ```
 
 ## Contributing
