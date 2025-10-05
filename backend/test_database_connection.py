@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Fast smoke test to verify Cosmos DB connection.
+Fast smoke test to verify database connection.
 """
 import asyncio
 import sys
@@ -11,20 +11,20 @@ import time
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 async def main():
-    """Fast smoke test for Cosmos DB connection."""
+    """Fast smoke test for database connection."""
     start_time = time.time()
-    print("🔍 Running Cosmos DB smoke test...")
+    print("🔍 Running database smoke test...")
     
     try:
-        from app.database import get_cosmos_db
+        from app.database import get_database
         from app.config import settings
         
         # Test connection with timeout
-        print(f"📡 Connecting to: {settings.effective_cosmos_endpoint}")
-        print(f"🗄️  Database: {settings.effective_cosmos_database_name}")
+        print(f"📡 Connecting to: {settings.database_url}")
+        print(f"🗄️  Database: {settings.database_name}")
         
-        cosmos_db = await get_cosmos_db()
-        health_result = await cosmos_db.health_check()
+        database = await get_database()
+        health_result = await database.health_check()
         
         elapsed = time.time() - start_time
         

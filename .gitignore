@@ -127,10 +127,15 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 
-# Azure Functions
+# Local settings
 local.settings.json
 bin
 obj
 
 # Testing
 .pytest_cache/
+
+# Firebase
+.firebaserc.local
+firebase-debug.log
+.firebase/

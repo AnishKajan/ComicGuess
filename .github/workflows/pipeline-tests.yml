@@ -234,8 +234,8 @@ jobs:
           - [ ] CLOUDFLARE_API_TOKEN
           
           ### Backend Deployment
-          - [ ] AZURE_CREDENTIALS
-          - [ ] AZURE_RESOURCE_GROUP
+          - [ ] DEPLOYMENT_CREDENTIALS
+          - [ ] DEPLOYMENT_CONFIG
           - [ ] REGISTRY_LOGIN_SERVER
           - [ ] REGISTRY_USERNAME
           - [ ] REGISTRY_PASSWORD
@@ -243,17 +243,17 @@ jobs:
           ### Environment-specific Secrets
           
           #### Test Environment
-          - [ ] TEST_COSMOS_ENDPOINT
-          - [ ] TEST_COSMOS_KEY
+          - [ ] TEST_DATABASE_URL
+          - [ ] TEST_DATABASE_KEY
           - [ ] TEST_STORAGE_ACCOUNT
           - [ ] TEST_STORAGE_KEY
           - [ ] TEST_JWT_SECRET
           - [ ] TEST_SESSION_SECRET
           
           #### Staging Environment
-          - [ ] STAGING_COSMOS_ENDPOINT
-          - [ ] STAGING_COSMOS_KEY
-          - [ ] STAGING_COSMOS_DATABASE
+          - [ ] STAGING_DATABASE_URL
+          - [ ] STAGING_DATABASE_KEY
+          - [ ] STAGING_DATABASE_NAME
           - [ ] STAGING_STORAGE_ACCOUNT
           - [ ] STAGING_STORAGE_KEY
           - [ ] STAGING_JWT_SECRET
@@ -261,9 +261,9 @@ jobs:
           - [ ] STAGING_ALLOWED_ORIGINS
           
           #### Production Environment
-          - [ ] PROD_COSMOS_ENDPOINT
-          - [ ] PROD_COSMOS_KEY
-          - [ ] PROD_COSMOS_DATABASE
+          - [ ] PROD_DATABASE_URL
+          - [ ] PROD_DATABASE_KEY
+          - [ ] PROD_DATABASE_NAME
           - [ ] PROD_STORAGE_ACCOUNT
           - [ ] PROD_STORAGE_KEY
           - [ ] PROD_JWT_SECRET

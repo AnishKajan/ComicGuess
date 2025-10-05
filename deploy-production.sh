@@ -16,7 +16,6 @@ NC='\033[0m' # No Color
 BACKEND_RESOURCE_GROUP="comicguess-rg"
 BACKEND_APP_NAME="comicguess-backend-prod"
 FRONTEND_PROJECT_NAME="comicguess-frontend"
-AZURE_LOCATION="eastus"
 
 # Functions
 log_info() {
@@ -38,9 +37,9 @@ log_error() {
 check_prerequisites() {
     log_info "Checking prerequisites..."
     
-    # Check if Azure CLI is installed
-    if ! command -v az &> /dev/null; then
-        log_error "Azure CLI is not installed. Please install it first."
+    # Check if required tools are installed
+    if ! command -v npm &> /dev/null; then
+        log_error "npm is not installed. Please install it first."
         exit 1
     fi
     
@@ -116,30 +115,14 @@ run_integration_tests() {
 }
 
 deploy_backend() {
-    log_info "Deploying backend to Azure App Service..."
+    log_info "Deploying backend..."
     
     cd backend
     
-    # Check if logged in to Azure
-    if ! az account show &> /dev/null; then
-        log_error "Not logged in to Azure. Please run 'az login' first."
-        exit 1
-    fi
-    
-    # Create resource group if it doesn't exist
-    if ! az group show --name $BACKEND_RESOURCE_GROUP &> /dev/null; then
-        log_info "Creating resource group: $BACKEND_RESOURCE_GROUP"
-        az group create --name $BACKEND_RESOURCE_GROUP --location $AZURE_LOCATION
-    fi
-    
-    # Deploy using Azure CLI
-    log_info "Deploying backend application..."
-    az webapp up \
-        --name $BACKEND_APP_NAME \
-        --resource-group $BACKEND_RESOURCE_GROUP \
-        --location $AZURE_LOCATION \
-        --runtime "PYTHON:3.11" \
-        --sku B1
+    # Note: Configure your preferred backend deployment method here
+    # This could be Docker, cloud hosting, or other deployment strategies
+    log_info "Backend deployment configuration needed..."
+    log_info "Please configure your preferred backend deployment method"
     
     # Configure startup command
     az webapp config set \
@@ -160,9 +143,9 @@ deploy_backend() {
             SCM_DO_BUILD_DURING_DEPLOYMENT=true \
             ENABLE_ORYX_BUILD=true
     
-    # Get the backend URL
-    BACKEND_URL="https://${BACKEND_APP_NAME}.azurewebsites.net"
-    log_success "Backend deployed successfully to: $BACKEND_URL"
+    # Set your backend URL here
+    BACKEND_URL="https://your-backend-url.com"
+    log_success "Backend deployment completed"
     
     cd ..
 }
@@ -179,7 +162,7 @@ deploy_frontend() {
     fi
     
     # Set environment variables for production
-    export NEXT_PUBLIC_API_URL="https://${BACKEND_APP_NAME}.azurewebsites.net"
+    export NEXT_PUBLIC_API_URL="https://your-backend-url.com"
     export NEXT_PUBLIC_APP_ENV="production"
     
     # Deploy to production
@@ -198,7 +181,7 @@ verify_deployment() {
     sleep 10
     
     # Check backend health
-    BACKEND_URL="https://${BACKEND_APP_NAME}.azurewebsites.net"
+    BACKEND_URL="https://your-backend-url.com"
     log_info "Checking backend health at: $BACKEND_URL/health"
     
     if curl -f -s "$BACKEND_URL/health" > /dev/null; then
@@ -248,7 +231,7 @@ print_summary() {
     echo "         DEPLOYMENT SUMMARY"
     echo "=========================================="
     echo ""
-    echo "Backend URL:  https://${BACKEND_APP_NAME}.azurewebsites.net"
+    echo "Backend URL:  Configure your backend deployment"
     echo "Frontend URL: Check Vercel dashboard for production URL"
     echo ""
     echo "Next Steps:"

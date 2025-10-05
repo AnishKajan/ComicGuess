@@ -13,13 +13,15 @@ from dataclasses import dataclass, asdict
 from datetime import datetime
 from pathlib import Path
 
-# Azure imports
+# Storage imports - configure for your preferred storage solution
 try:
-    from azure.storage.blob import BlobServiceClient, ContentSettings
-    from azure.core.exceptions import ResourceNotFoundError
+    # Example: Firebase Storage, AWS S3, or other cloud storage
+    # from firebase_admin import storage
+    # from google.cloud import storage
+    pass
 except ImportError:
-    print("Azure Storage SDK not installed.")
-    print("Install with: pip install azure-storage-blob")
+    print("Storage SDK not installed.")
+    print("Install your preferred storage SDK")
     exit(1)
 
 # Cloudflare imports
@@ -154,7 +156,7 @@ class ImageProcessingWorkflow:
     """Automated image processing workflow."""
     
     def __init__(self, 
-                 azure_connection_string: str,
+                 storage_connection_string: str,
                  container_name: str,
                  cdn_base_url: str,
                  cloudflare_zone_id: str = None,
@@ -163,13 +165,14 @@ class ImageProcessingWorkflow:
         Initialize image processing workflow.
         
         Args:
-            azure_connection_string: Azure Storage connection string
-            container_name: Blob storage container name
+            storage_connection_string: Storage service connection string
+            container_name: Storage container name
             cdn_base_url: CDN base URL for images
             cloudflare_zone_id: Cloudflare zone ID (optional)
             cloudflare_api_token: Cloudflare API token (optional)
         """
-        self.blob_service_client = BlobServiceClient.from_connection_string(azure_connection_string)
+        # Configure your storage client here
+        # self.storage_client = YourStorageClient.from_connection_string(storage_connection_string)
         self.container_name = container_name
         self.cdn_base_url = cdn_base_url.rstrip('/')
         
@@ -540,8 +543,8 @@ async def main():
     
     # Initialize workflow
     workflow = ImageProcessingWorkflow(
-        azure_connection_string=config['azure_connection_string'],
-        container_name=config['container_name'],
+        storage_connection_string=config['storage_connection_string'],
+        container_name=config['storage_container'],
         cdn_base_url=config['cdn_base_url'],
         cloudflare_zone_id=config.get('cloudflare_zone_id'),
         cloudflare_api_token=config.get('cloudflare_api_token')

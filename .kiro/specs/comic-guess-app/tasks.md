@@ -26,7 +26,7 @@
   - _Requirements: 8.4, 8.6_
 
 - [ ] 3. Set up database connection and repository layer
-- [x] 3.1 Implement Azure Cosmos DB connection utilities
+- [x] 3.1 Implement Firebase Firestore connection utilities
 
   - Create database connection management with proper configuration
   - Implement partition key handling for users, puzzles, and guesses
@@ -84,10 +84,10 @@
   - Write integration tests for game flow scenarios
   - _Requirements: 8.1, 8.2, 2.2, 2.3, 8.6_
 
-- [x] 6. Set up Azure Blob Storage for character images
+- [x] 6. Set up Firebase Storage for character images
 - [x] 6.1 Implement image storage utilities
 
-  - Create Azure Blob Storage connection and configuration
+  - Create Firebase Storage connection and configuration
   - Implement image upload and retrieval functions
   - Build universe-based folder organization (marvel/, DC/, image/)
   - Write tests for image storage operations
@@ -177,10 +177,10 @@
   - Write security tests for input validation
   - _Requirements: 8.6, 6.5_
 
-- [x] 11. Create Azure Function for daily puzzle automation
+- [x] 11. Create scheduled task for daily puzzle automation
 - [x] 11.1 Build daily puzzle generation function
 
-  - Create Azure Function with timer trigger for UTC midnight
+  - Create scheduled task with timer trigger for UTC midnight
   - Implement puzzle selection and rotation logic
   - Build database update operations for new daily puzzles
   - Write tests for puzzle generation automation
@@ -222,7 +222,7 @@
 
 - [x] 13.2 Configure backend deployment
 
-  - Set up Azure App Service deployment
+  - Set up cloud hosting deployment
   - Implement Docker containerization for backend
   - Create environment configuration and secrets management
   - Write deployment tests and monitoring setup
@@ -322,7 +322,7 @@
 
 - [x] 18.3 Implement secrets management and data protection
 
-  - Migrate all secrets to Azure Key Vault with scheduled rotation
+  - Migrate all secrets to secure storage with scheduled rotation
   - Ensure no secrets appear in CI logs or version control
   - Implement PII minimization and data retention policies with TTL
   - Create account deletion flow and data purging capabilities
@@ -340,7 +340,7 @@
 - [x] 19. Reliability, backups & disaster recovery
 - [x] 19.1 Implement database backup and recovery procedures
 
-  - Set up Cosmos DB backup and restore testing with defined RPO/RTO targets
+  - Set up database backup and restore testing with defined RPO/RTO targets
   - Create automated backup verification and recovery drills
   - Implement point-in-time recovery capabilities
   - Write tests for backup integrity and recovery procedures
@@ -358,7 +358,7 @@
 
   - Add health checks, readiness, and liveness endpoints for backend services
   - Implement graceful shutdown procedures and connection draining
-  - Create retry/backoff policy matrix for API to Cosmos/Blob interactions
+  - Create retry/backoff policy matrix for API to database/storage interactions
   - Add idempotency keys for write operations to prevent duplicate processing
   - Write tests for health monitoring and resilience patterns
   - _Requirements: 8.6, 6.1_
@@ -391,7 +391,7 @@
 - [x] 21. CI/CD & environments
 - [x] 21.1 Set up automated CI/CD pipelines
 
-  - Create GitHub Actions or Azure DevOps pipelines for lint, test, build, security scan, and deploy
+  - Create GitHub Actions pipelines for lint, test, build, security scan, and deploy
   - Implement automated security scanning and dependency vulnerability checks
   - Add code quality gates and test coverage requirements
   - Write tests for pipeline functionality and deployment validation
@@ -415,7 +415,7 @@
 
 - [x] 21.4 Implement Infrastructure as Code
 
-  - Create Bicep or Terraform templates for Cosmos DB, Storage, App Service, and Functions
+  - Create infrastructure templates for database, storage, hosting, and functions
   - Implement infrastructure versioning and change management
   - Add infrastructure testing and validation procedures
   - Write tests for infrastructure provisioning and configuration
@@ -424,8 +424,8 @@
 - [x] 22. Cost & performance management
 - [x] 22.1 Implement cost monitoring and optimization
 
-  - Set up Azure budgets and cost alerts with appropriate thresholds
-  - Plan Cosmos DB RU/s requirements with autoscale guardrails
+  - Set up cloud budgets and cost alerts with appropriate thresholds
+  - Plan database requirements with autoscale guardrails
   - Implement cost optimization strategies and resource right-sizing
   - Write tests for cost monitoring and budget alert functionality
   - _Requirements: 5.1, 5.5_

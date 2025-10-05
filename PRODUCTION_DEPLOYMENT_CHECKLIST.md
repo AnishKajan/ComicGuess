@@ -21,7 +21,7 @@
 - [ ] All sensitive data is encrypted at rest
 - [ ] HTTPS is enforced for all communications
 - [ ] Database connections use SSL/TLS
-- [ ] API keys and secrets are stored in Azure Key Vault
+- [ ] API keys and secrets are stored securely
 - [ ] PII data handling complies with privacy regulations
 
 ### 🌐 Network Security
@@ -35,8 +35,8 @@
 
 ### 🔧 Backend Configuration
 - [ ] Production environment variables are set
-- [ ] Azure Cosmos DB is configured with proper partition keys
-- [ ] Azure Blob Storage is configured with proper access controls
+- [ ] Database is configured with proper settings
+- [ ] File storage is configured with proper access controls
 - [ ] Logging is configured for production
 - [ ] Health check endpoints are working
 - [ ] Error handling is production-ready
@@ -48,9 +48,9 @@
 - [ ] CDN configuration is complete
 - [ ] Static asset caching is configured
 
-### ☁️ Azure Resources
-- [ ] Resource groups are properly organized
-- [ ] App Service plans are right-sized
+### ☁️ Cloud Resources
+- [ ] Resources are properly organized
+- [ ] Hosting plans are right-sized
 - [ ] Auto-scaling is configured
 - [ ] Backup strategies are in place
 - [ ] Monitoring and alerting are set up
@@ -97,7 +97,7 @@
 ## Monitoring & Alerting
 
 ### 📊 Application Monitoring
-- [ ] Application Insights is configured
+- [ ] Application monitoring is configured
 - [ ] Custom metrics are being collected
 - [ ] Error tracking is working
 - [ ] Performance monitoring is active
@@ -149,7 +149,7 @@
 - **Technical Lead**: [Contact Information]
 - **DevOps Engineer**: [Contact Information]
 - **Security Team**: [Contact Information]
-- **Azure Support**: [Support Plan Details]
+- **Cloud Support**: [Support Plan Details]
 
 ## Rollback Triggers
 

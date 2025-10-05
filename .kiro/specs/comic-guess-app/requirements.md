@@ -63,8 +63,8 @@ The scope of ComicGuess is limited to daily character puzzles from Marvel, DC, a
 
 #### Acceptance Criteria
 
-1. WHEN user data is stored THEN the system SHALL use Azure Cosmos DB with SQL API
-2. WHEN character images are requested THEN the system SHALL serve them from Azure Blob Storage
+1. WHEN user data is stored THEN the system SHALL use Firebase Firestore
+2. WHEN character images are requested THEN the system SHALL serve them from Firebase Storage
 3. WHEN puzzles are generated THEN the system SHALL store puzzle metadata in the database
 4. WHEN images are organized THEN the system SHALL use universe-based folder structure (marvel/, DC/, image/)
 5. WHEN the database is accessed THEN the system SHALL use partition keys (/id for users and puzzles, /userId for guesses)

@@ -18,7 +18,7 @@ help:
 	@echo "  make install-backend  - Install backend dependencies"
 	@echo ""
 	@echo "Database:"
-	@echo "  make db-smoke         - Quick Cosmos DB connection test"
+	@echo "  make db-smoke         - Quick database connection test"
 	@echo "  make db-init          - Initialize database containers"
 	@echo "  make db-status        - Show database status"
 	@echo ""
@@ -63,8 +63,8 @@ install-backend:
 
 # Database commands
 db-smoke:
-	@echo "🔍 Running Cosmos DB smoke test..."
-	cd backend && python test_cosmos_connection.py
+	@echo "🔍 Running database smoke test..."
+	cd backend && python test_database_connection.py
 
 db-init:
 	@echo "🗄️  Initializing database..."

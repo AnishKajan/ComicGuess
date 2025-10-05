@@ -4,7 +4,7 @@
 
 ComicGuess is architected as a modern full-stack web application with clear separation between frontend presentation, backend API services, and cloud infrastructure. The system follows a microservices-inspired approach with distinct layers for user interface, business logic, data persistence, and content delivery.
 
-The application uses Next.js 14 for the frontend with server-side rendering capabilities, FastAPI for a high-performance Python backend, Azure cloud services for scalable data storage and content delivery, and Cloudflare for global CDN and security.
+The application uses Next.js 14 for the frontend with server-side rendering capabilities, FastAPI for a high-performance Python backend, Firebase for scalable data storage and authentication, and Cloudflare for global CDN and security.
 
 ## Architecture
 
@@ -31,12 +31,12 @@ graph TB
     end
     
     subgraph "Data Layer"
-        J[Azure Cosmos DB]
-        K[Azure Blob Storage]
+        J[Firebase Firestore]
+        K[Firebase Storage]
     end
     
     subgraph "Automation"
-        L[Azure Function Timer]
+        L[Scheduled Tasks]
         M[Puzzle Generation Logic]
     end
     
@@ -63,14 +63,14 @@ graph TB
 - JWT for stateless authentication
 
 **Database & Storage:**
-- Azure Cosmos DB (SQL API) for user data and puzzle metadata
-- Azure Blob Storage for character images with CDN integration
+- Firebase Firestore for user data and puzzle metadata
+- Firebase Storage for character images with CDN integration
 
 **Infrastructure:**
 - Cloudflare for CDN, DNS, and security
-- Azure Functions for serverless puzzle generation
-- Vercel for frontend deployment (or Azure Static Web Apps)
-- Azure App Service for backend deployment
+- Scheduled tasks for serverless puzzle generation
+- Vercel for frontend deployment
+- Cloud hosting for backend deployment
 
 ## Components and Interfaces
 
@@ -225,7 +225,7 @@ async def test_guess_endpoint():
 ```
 
 ### Database Testing
-- Unit tests with Cosmos DB Emulator for local development
+- Unit tests with database emulator for local development
 - Integration tests with test containers for CI/CD
 - Performance tests for partition key efficiency
 
@@ -243,7 +243,7 @@ async def test_guess_endpoint():
 
 ### Infrastructure Security
 - HTTPS enforcement through Cloudflare
-- Azure Key Vault for sensitive configuration
+- Secure configuration management for sensitive data
 - Network security groups for backend services
 - Regular security updates and dependency scanning
 
@@ -286,7 +286,7 @@ async def test_guess_endpoint():
 }
 ```
 
-### Backend Deployment (Azure App Service)
+### Backend Deployment
 ```dockerfile
 FROM python:3.11-slim
 WORKDIR /app
@@ -297,25 +297,23 @@ EXPOSE 8000
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
 ```
 
-### Azure Function (Daily Puzzle Generator)
+### Scheduled Task (Daily Puzzle Generator)
 ```python
-import azure.functions as func
 import logging
 from datetime import datetime, timedelta
 
-def main(mytimer: func.TimerRequest) -> None:
+def generate_daily_puzzles():
     """Triggered daily at UTC midnight to generate new puzzles"""
-    if mytimer.past_due:
-        logging.info('Timer is past due!')
+    logging.info('Generating daily puzzles...')
     
     # Generate puzzles for all three universes
-    generate_daily_puzzles()
+    # Implementation depends on chosen scheduling solution
 ```
 
 ## Monitoring and Analytics
 
 ### Application Monitoring
-- Azure Application Insights for backend performance
+- Application monitoring for backend performance
 - Vercel Analytics for frontend metrics
 - Custom events for puzzle completion rates
 - Error tracking with Sentry integration

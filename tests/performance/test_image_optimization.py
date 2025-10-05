@@ -14,14 +14,14 @@ import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), '../../scripts'))
 
 try:
-    from image_optimizer import ImageOptimizer, ImageOptimizationResult, AzureBlobImageOptimizer
+    from image_optimizer import ImageOptimizer, ImageOptimizationResult, CloudStorageImageOptimizer
     from image_processing_workflow import ImageProcessingWorkflow, ImageProcessingJob, CloudflareCache
     PIL_AVAILABLE = True
 except ImportError:
     # Mock classes if PIL or other dependencies are not available
     ImageOptimizer = None
     ImageOptimizationResult = None
-    AzureBlobImageOptimizer = None
+    CloudStorageImageOptimizer = None
     ImageProcessingWorkflow = None
     ImageProcessingJob = None
     CloudflareCache = None
@@ -122,23 +122,23 @@ class TestImageOptimizer:
         assert result.exif_stripped is True
         assert result.error is None
 
-class TestAzureBlobImageOptimizer:
-    """Test Azure Blob Storage image optimization."""
+class TestCloudStorageImageOptimizer:
+    """Test Cloud Storage image optimization."""
     
     @pytest.fixture
-    def mock_blob_optimizer(self):
-        """Create a mock Azure Blob image optimizer."""
-        if AzureBlobImageOptimizer is None:
-            pytest.skip("Azure SDK dependencies not available")
+    def mock_storage_optimizer(self):
+        """Create a mock Cloud Storage image optimizer."""
+        if CloudStorageImageOptimizer is None:
+            pytest.skip("Storage SDK dependencies not available")
         
-        with patch('image_optimizer.BlobServiceClient'):
-            return AzureBlobImageOptimizer('test_connection', 'test_container')
+        with patch('image_optimizer.StorageClient'):
+            return CloudStorageImageOptimizer('test_connection', 'test_container')
     
     @pytest.mark.asyncio
-    async def test_blob_optimization_workflow(self, mock_blob_optimizer):
-        """Test blob optimization workflow."""
-        if AzureBlobImageOptimizer is None:
-            pytest.skip("Azure SDK dependencies not available")
+    async def test_storage_optimization_workflow(self, mock_storage_optimizer):
+        """Test storage optimization workflow."""
+        if CloudStorageImageOptimizer is None:
+            pytest.skip("Storage SDK dependencies not available")
         
         # Mock blob client and download
         mock_blob_client = Mock()
@@ -186,9 +186,9 @@ class TestImageProcessingWorkflow:
         if ImageProcessingWorkflow is None:
             pytest.skip("Image processing workflow dependencies not available")
         
-        with patch('image_processing_workflow.BlobServiceClient'):
+        with patch('image_processing_workflow.StorageClient'):
             return ImageProcessingWorkflow(
-                azure_connection_string='test_connection',
+                storage_connection_string='test_connection',
                 container_name='test_container',
                 cdn_base_url='https://cdn.example.com'
             )
@@ -306,7 +306,7 @@ class TestImageOptimizationFiles:
         
         # Check for required classes and functions
         assert 'class ImageOptimizer' in content
-        assert 'class AzureBlobImageOptimizer' in content
+        assert 'class CloudStorageImageOptimizer' in content
         assert 'def strip_exif_data' in content
         assert 'def resize_image' in content
         assert 'def optimize_single_image' in content

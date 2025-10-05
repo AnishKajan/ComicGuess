@@ -33,7 +33,7 @@ pip install -r requirements.txt
 3. Configure environment:
 ```bash
 cp .env.example .env
-# Edit .env with your Azure credentials and configuration
+# Edit .env with your Firebase credentials and configuration
 ```
 
 4. Run the development server:

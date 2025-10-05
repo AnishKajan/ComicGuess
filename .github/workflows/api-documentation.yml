@@ -156,18 +156,7 @@ jobs:
     name: API Contract Testing
     runs-on: ubuntu-latest
     needs: generate-openapi-spec
-    services:
-      cosmos-emulator:
-        image: mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:latest
-        ports:
-          - 8081:8081
-          - 10251:10251
-          - 10252:10252
-          - 10253:10253
-          - 10254:10254
-        env:
-          AZURE_COSMOS_EMULATOR_PARTITION_COUNT: 10
-          AZURE_COSMOS_EMULATOR_ENABLE_DATA_PERSISTENCE: false
+    # Note: Database services can be configured here if needed for testing
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -189,9 +178,7 @@ jobs:
           name: openapi-specification
           path: docs/api/
 
-      - name: Wait for Cosmos DB Emulator
-        run: |
-          timeout 300 bash -c 'until curl -k https://localhost:8081/_explorer/emulator.pem; do sleep 5; done'
+      # Database setup can be configured here if needed
 
       - name: Start backend server
         run: |
@@ -202,9 +189,8 @@ jobs:
           timeout 60 bash -c 'until curl -f http://localhost:8000/health; do sleep 2; done'
         env:
           APP_ENV: test
-          COSMOS_ENDPOINT: https://localhost:8081
-          COSMOS_KEY: C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==
-          COSMOS_DATABASE_NAME: test_comicguess
+          DATABASE_URL: test-database-url
+          DATABASE_NAME: test_comicguess
           JWT_SECRET_KEY: test-secret-key-for-contract-testing
           SESSION_SECRET: test-session-secret
 

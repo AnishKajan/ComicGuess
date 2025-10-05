@@ -25,13 +25,15 @@ except ImportError:
     print("Install with: pip install Pillow pillow-heif")
     sys.exit(1)
 
-# Azure Blob Storage imports
+# Cloud Storage imports - configure for your preferred storage solution
 try:
-    from azure.storage.blob import BlobServiceClient, ContentSettings
-    from azure.core.exceptions import ResourceNotFoundError
+    # Example: Firebase Storage, AWS S3, or other cloud storage
+    # from firebase_admin import storage
+    # from google.cloud import storage
+    pass
 except ImportError:
-    print("Azure Storage SDK not installed.")
-    print("Install with: pip install azure-storage-blob")
+    print("Storage SDK not installed.")
+    print("Install your preferred storage SDK")
     sys.exit(1)
 
 logging.basicConfig(level=logging.INFO)
@@ -279,16 +281,16 @@ class ImageOptimizer:
         
         return results
 
-class AzureBlobImageOptimizer:
-    """Azure Blob Storage integration for image optimization."""
+class CloudStorageImageOptimizer:
+    """Cloud Storage integration for image optimization."""
     
     def __init__(self, connection_string: str, container_name: str):
         """
-        Initialize Azure Blob image optimizer.
+        Initialize Cloud Storage image optimizer.
         
         Args:
-            connection_string: Azure Storage connection string
-            container_name: Blob container name
+            connection_string: Storage service connection string
+            container_name: Storage container name
         """
         self.blob_service_client = BlobServiceClient.from_connection_string(connection_string)
         self.container_name = container_name
@@ -440,8 +442,8 @@ def main():
     parser = argparse.ArgumentParser(description='Optimize images for ComicGuess')
     parser.add_argument('--input-dir', help='Input directory containing images')
     parser.add_argument('--output-dir', help='Output directory for optimized images')
-    parser.add_argument('--azure-connection', help='Azure Storage connection string')
-    parser.add_argument('--container', help='Azure Blob container name')
+    parser.add_argument('--storage-connection', help='Storage service connection string')
+    parser.add_argument('--container', help='Storage container name')
     parser.add_argument('--blob-prefix', help='Blob name prefix filter', default='')
     parser.add_argument('--width', type=int, default=800, help='Target width')
     parser.add_argument('--height', type=int, default=600, help='Target height')
@@ -478,11 +480,11 @@ def main():
             json.dump([result.__dict__ for result in results], f, indent=2, default=str)
         print(f"Detailed results saved to: {results_file}")
         
-    elif args.azure_connection and args.container:
-        # Azure Blob optimization
-        async def run_azure_optimization():
-            azure_optimizer = AzureBlobImageOptimizer(args.azure_connection, args.container)
-            results = await azure_optimizer.batch_optimize_container(args.blob_prefix)
+    elif args.storage_connection and args.container:
+        # Cloud Storage optimization
+        async def run_storage_optimization():
+            storage_optimizer = CloudStorageImageOptimizer(args.storage_connection, args.container)
+            results = await storage_optimizer.batch_optimize_container(args.blob_prefix)
             
             # Print summary
             successful_results = [r for r in results if not r.error]
@@ -491,26 +493,26 @@ def main():
             total_savings = total_original_size - total_optimized_size
             avg_compression = (total_savings / total_original_size * 100) if total_original_size > 0 else 0
             
-            print(f"\nAzure Blob Optimization Summary:")
+            print(f"\nCloud Storage Optimization Summary:")
             print(f"Images processed: {len(successful_results)}")
             print(f"Total size reduction: {total_savings / 1024 / 1024:.1f} MB")
             print(f"Average compression: {avg_compression:.1f}%")
             
             # Save results
-            results_file = f"azure_optimization_results_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+            results_file = f"storage_optimization_results_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
             with open(results_file, 'w') as f:
                 json.dump([result.__dict__ for result in results], f, indent=2, default=str)
             print(f"Detailed results saved to: {results_file}")
         
-        asyncio.run(run_azure_optimization())
+        asyncio.run(run_storage_optimization())
         
     else:
         parser.print_help()
         print("\nExamples:")
         print("  Local optimization:")
         print("    python image-optimizer.py --input-dir ./images --output-dir ./optimized")
-        print("  Azure Blob optimization:")
-        print("    python image-optimizer.py --azure-connection 'connection_string' --container 'images'")
+        print("  Cloud Storage optimization:")
+        print("    python image-optimizer.py --storage-connection 'connection_string' --container 'images'")
 
 if __name__ == "__main__":
     main()

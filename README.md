@@ -35,10 +35,10 @@ ComicGuess/
 - **JWT** for authentication
 
 ### Infrastructure
-- **Azure Cosmos DB** for data storage
-- **Azure Blob Storage** for character images
+- **Firebase Firestore** for data storage
+- **Firebase Storage** for character images
 - **Cloudflare CDN** for content delivery
-- **Azure Functions** for daily puzzle automation
+- **Scheduled tasks** for daily puzzle automation
 
 ## Getting Started
 
@@ -46,7 +46,7 @@ ComicGuess/
 
 - Node.js 18+ and npm
 - Python 3.11+
-- Azure account (for cloud services)
+- Firebase project (for cloud services)
 
 ### Frontend Setup
 
@@ -98,10 +98,19 @@ Once the backend is running, visit `http://localhost:8000/docs` for interactive 
 - `NEXT_PUBLIC_JWT_SECRET` - JWT secret for client-side validation
 
 ### Backend (.env)
-- `COSMOS_DB_ENDPOINT` - Azure Cosmos DB endpoint
-- `COSMOS_DB_KEY` - Azure Cosmos DB access key
-- `AZURE_STORAGE_CONNECTION_STRING` - Azure Blob Storage connection
+- `FIREBASE_PROJECT_ID` - Firebase project ID
+- `FIREBASE_PRIVATE_KEY` - Firebase service account private key
+- `FIREBASE_CLIENT_EMAIL` - Firebase service account email
 - `JWT_SECRET_KEY` - JWT signing secret
+
+## Deploy (manual)
+
+```bash
+cd frontend
+npm ci
+npm run build:static
+npx firebase deploy --only hosting --project comicguess
+```
 
 ## Contributing
 

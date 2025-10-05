@@ -11,7 +11,7 @@ from typing import Dict, Any
 # Add the backend directory to the Python path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from app.database import initialize_database, cleanup_database, get_cosmos_db
+from app.database import initialize_database, cleanup_database, get_database
 
 
 async def init_command() -> None:
@@ -40,8 +40,8 @@ async def health_command() -> None:
     print("Checking database health...")
     
     try:
-        cosmos_db = await get_cosmos_db()
-        health_result = await cosmos_db.health_check()
+        database = await get_database()
+        health_result = await database.health_check()
         print(json.dumps(health_result, indent=2))
     except Exception as e:
         print(f"Health check failed: {e}")
@@ -56,17 +56,17 @@ async def status_command() -> None:
     try:
         from app.config import settings
         
-        print(f"Endpoint: {settings.effective_cosmos_endpoint}")
-        print(f"Database: {settings.effective_cosmos_database_name}")
-        print(f"Containers:")
-        print(f"  - Users: {settings.cosmos_container_users}")
-        print(f"  - Puzzles: {settings.cosmos_container_puzzles}")
-        print(f"  - Guesses: {settings.cosmos_container_guesses}")
-        print(f"  - Streaks: {settings.cosmos_container_streaks}")
+        print(f"Database URL: {settings.database_url}")
+        print(f"Database: {settings.database_name}")
+        print(f"Collections:")
+        print(f"  - Users: {settings.users_collection}")
+        print(f"  - Puzzles: {settings.puzzles_collection}")
+        print(f"  - Guesses: {settings.guesses_collection}")
+        print(f"  - Streaks: {settings.streaks_collection}")
         
         # Try to connect and get health status
-        cosmos_db = await get_cosmos_db()
-        health_result = await cosmos_db.health_check()
+        database = await get_database()
+        health_result = await database.health_check()
         
         print(f"\nConnection Status: {health_result['status']}")
         
@@ -87,14 +87,14 @@ async def test_connection_command() -> None:
     print("Testing database connection...")
     
     try:
-        cosmos_db = await get_cosmos_db()
-        print("✓ Successfully connected to Cosmos DB")
+        database = await get_database()
+        print("✓ Successfully connected to database")
         
-        # Test each container
-        containers = [
-            ("users", cosmos_db.users_container),
-            ("puzzles", cosmos_db.puzzles_container),
-            ("guesses", cosmos_db.guesses_container)
+        # Test each collection
+        collections = [
+            ("users", database.users_collection),
+            ("puzzles", database.puzzles_collection),
+            ("guesses", database.guesses_collection)
         ]
         
         for name, container in containers:

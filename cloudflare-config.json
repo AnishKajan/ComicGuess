@@ -11,7 +11,7 @@
     {
       "type": "CNAME", 
       "name": "api",
-      "content": "comicguess-backend-prod.azurewebsites.net",
+      "content": "your-backend-domain.com",
       "ttl": 300,
       "proxied": true
     }

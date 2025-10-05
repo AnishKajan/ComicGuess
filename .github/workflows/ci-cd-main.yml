@@ -240,18 +240,7 @@ jobs:
     defaults:
       run:
         working-directory: ./backend
-    services:
-      cosmos-emulator:
-        image: mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:latest
-        ports:
-          - 8081:8081
-          - 10251:10251
-          - 10252:10252
-          - 10253:10253
-          - 10254:10254
-        env:
-          AZURE_COSMOS_EMULATOR_PARTITION_COUNT: 10
-          AZURE_COSMOS_EMULATOR_ENABLE_DATA_PERSISTENCE: false
+    # Note: Database services can be configured here if needed for testing
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -267,20 +256,17 @@ jobs:
           pip install -r requirements.txt
           pip install pytest-cov pytest-xdist
 
-      - name: Wait for Cosmos DB Emulator
-        run: |
-          timeout 300 bash -c 'until curl -k https://localhost:8081/_explorer/emulator.pem; do sleep 5; done'
+      # Database setup can be configured here if needed
 
       - name: Run tests with coverage
         run: |
           pytest tests/ -v --cov=app --cov-report=xml --cov-report=html --cov-report=term-missing --cov-fail-under=80 -n auto
         env:
           APP_ENV: test
-          COSMOS_ENDPOINT: https://localhost:8081
-          COSMOS_KEY: C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==
-          COSMOS_DATABASE_NAME: test_comicguess
-          AZURE_STORAGE_ACCOUNT_NAME: devstoreaccount1
-          AZURE_STORAGE_ACCOUNT_KEY: Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==
+          DATABASE_URL: test-database-url
+          FIREBASE_PROJECT_ID: test-project
+          FIREBASE_PRIVATE_KEY: test-private-key
+          FIREBASE_CLIENT_EMAIL: test@test-project.iam.gserviceaccount.com
           JWT_SECRET_KEY: test-secret-key-for-ci
           SESSION_SECRET: test-session-secret-for-ci
 

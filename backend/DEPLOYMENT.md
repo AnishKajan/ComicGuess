@@ -1,31 +1,31 @@
 # Backend Deployment Guide
 
-This document outlines the deployment process for the ComicGuess backend API using Azure App Service.
+This document outlines the deployment process for the ComicGuess backend API.
 
 ## Prerequisites
 
-1. **Azure Account**: Active Azure subscription
-2. **Azure CLI**: Installed and configured locally
+1. **Cloud Account**: Active cloud service subscription
+2. **Deployment Tools**: Installed and configured locally
 3. **Docker**: For containerized deployments (optional)
 4. **GitHub Repository**: Code must be in a GitHub repository
 
 ## Environment Setup
 
-### Required Azure Resources
+### Required Cloud Resources
 
-Before deployment, ensure these Azure resources exist:
+Before deployment, ensure these cloud resources exist:
 
 1. **Resource Group**: `comicguess-rg`
-2. **Azure Cosmos DB**: SQL API database
-3. **Azure Blob Storage**: For character images
-4. **Azure App Service Plan**: Linux-based plan
-5. **Azure Key Vault**: For secrets management (recommended)
+2. **Firebase Firestore**: Database service
+3. **Firebase Storage**: For character images
+4. **Hosting Service**: For backend deployment
+5. **Secrets Management**: For secure configuration (recommended)
 
 ### Environment Variables
 
 #### Required Variables
 
-Configure these in Azure App Service Application Settings:
+Configure these in your hosting service application settings:
 
 ```bash
 # Application Configuration
@@ -34,7 +34,7 @@ DEBUG=false
 LOG_LEVEL=INFO
 
 # Database Configuration
-COSMOS_ENDPOINT=https://your-cosmos.documents.azure.com:443/
+FIREBASE_PROJECT_ID=your-firebase-project-id
 COSMOS_KEY=your-cosmos-primary-key
 COSMOS_DATABASE_NAME=comicguess
 COSMOS_CONTAINER_USERS=users

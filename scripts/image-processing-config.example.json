@@ -1,6 +1,6 @@
 {
-  "azure_connection_string": "DefaultEndpointsProtocol=https;AccountName=comicguessstorage;AccountKey=your_key_here;EndpointSuffix=core.windows.net",
-  "container_name": "character-images",
+  "storage_connection_string": "your_storage_connection_string_here",
+  "storage_container": "character-images",
   "cdn_base_url": "https://cdn.comicguess.com",
   "cloudflare_zone_id": "your_cloudflare_zone_id",
   "cloudflare_api_token": "your_cloudflare_api_token",
